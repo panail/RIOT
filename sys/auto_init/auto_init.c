@@ -165,11 +165,6 @@ void auto_init(void)
     auto_init_mrf24j40();
 #endif
 
-#ifdef MODULE_RAIL
-    extern void auto_init_rail(void);
-    auto_init_rail();
-#endif
-
 #ifdef MODULE_CC2420
     extern void auto_init_cc2420(void);
     auto_init_cc2420();
@@ -380,25 +375,9 @@ auto_init_mpu9150();
     extern void auto_init_lis2dh12(void);
     auto_init_lis2dh12();
 #endif
-#ifdef MODULE_EFM32_VDD_MEASUREMENT
-    extern void auto_init_efm32_vdd_measurement(void);
-    auto_init_efm32_vdd_measurement();
-#endif
-#ifdef MODULE_EFM32_INTERNAL_TEMP_SENSOR
-    extern void auto_init_efm32_internal_temp_sensor(void);
-    auto_init_efm32_internal_temp_sensor();
-#endif
-#ifdef MODULE_BATTERY_MONITOR
-    extern void auto_init_battery_monitor(void);
-    auto_init_battery_monitor();
-#endif
-#ifdef MODULE_MS5607
-    extern void auto_init_ms5607(void);
-    auto_init_ms5607();
-#endif
-#ifdef MODULE_SHT35
-    extern void auto_init_sht35(void);
-    auto_init_sht35();
+#ifdef MODULE_SI114X
+    extern void auto_init_si114x(void);
+    auto_init_si114x();
 #endif
 
 #endif /* MODULE_AUTO_INIT_SAUL */
