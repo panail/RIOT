@@ -30,6 +30,12 @@ ifneq (,$(filter at86rf2%,$(USEMODULE)))
   FEATURES_REQUIRED += periph_spi
 endif
 
+ifneq (,$(filter ata8520e,$(USEMODULE)))
+  USEMODULE += xtimer
+  USEMODULE += fmt
+  FEATURES_REQUIRED += periph_gpio
+  FEATURES_REQUIRED += periph_spi
+endif
 
 ifneq (,$(filter bh1750fvi,$(USEMODULE)))
   USEMODULE += xtimer
@@ -123,11 +129,6 @@ endif
 ifneq (,$(filter hdc1000,$(USEMODULE)))
   USEMODULE += xtimer
   FEATURES_REQUIRED += periph_i2c
-endif
-
-ifneq (,$(filter pulse_counter,$(USEMODULE)))
-  USEMODULE += xtimer
-  FEATURES_REQUIRED += periph_gpio
 endif
 
 ifneq (,$(filter hih6130,$(USEMODULE)))
@@ -246,17 +247,6 @@ ifneq (,$(filter pcd8544,$(USEMODULE)))
   USEMODULE += xtimer
 endif
 
-ifneq (,$(filter rail,$(USEMODULE)))
-  USEMODULE += xtimer
-  USEMODULE += luid
-  USEMODULE += netif
-  USEMODULE += ieee802154
-  USEMODULE += netdev_ieee802154
-  USEMODULE += gecko_sdk_librail
-  USEMODULE += netopt
-  USEPKG 	+= gecko_sdk
-endif
-
 ifneq (,$(filter rgbled,$(USEMODULE)))
   USEMODULE += color
 endif
@@ -351,31 +341,4 @@ endif
 ifneq (,$(filter tja1042,$(USEMODULE)))
   USEMODULE += can_trx
   FEATURES_REQUIRED += periph_gpio
-endif
-
-ifneq (,$(filter efm32_vdd_measurement,$(USEMODULE)))
-  FEATURES_REQUIRED += periph_adc
-endif
-
-ifneq (,$(filter efm32_internal_temp_sensor,$(USEMODULE)))
-  FEATURES_REQUIRED += periph_adc
-endif
-
-ifneq (,$(filter battery_monitor,$(USEMODULE)))
-  FEATURES_REQUIRED += periph_adc
-endif
-
-ifneq (,$(filter m24512,$(USEMODULE)))
-  FEATURES_REQUIRED += periph_i2c
-  USEMODULE += nvram
-endif
-
-ifneq (,$(filter ms5607,$(USEMODULE)))
-  FEATURES_REQUIRED += periph_i2c
-  USEMODULE += xtimer
-endif
-
-ifneq (,$(filter sht35,$(USEMODULE)))
-  FEATURES_REQUIRED += periph_i2c
-  USEMODULE += xtimer
 endif
