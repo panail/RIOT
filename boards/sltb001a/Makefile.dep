@@ -12,3 +12,4 @@ include $(RIOTCPU)/efm32/Makefile.dep
 ifneq (,$(filter netdev_default gnrc_netdev_default,$(USEMODULE)))
     USEMODULE += rail
 endif
+
