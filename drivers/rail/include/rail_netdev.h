@@ -2,9 +2,9 @@
 #ifndef  RAIL_NETDEV_H_INC
 #define  RAIL_NETDEV_H_INC
 
-#include "net/netdev2.h"
+#include "net/netdev.h"
 
-extern const netdev2_driver_t rail_driver;
+extern const netdev_driver_t rail_driver;
 
 #ifdef __cplusplus
 extern "C" {

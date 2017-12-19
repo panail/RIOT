@@ -8,7 +8,6 @@ RAIL_INCLUDES += -I$(RAIL_SDK_SRCDIR)/chip/efr32
 RAIL_INCLUDES += -I$(RAIL_SDK_SRCDIR)/chip/efr32/rf/common/cortex
 
 #RAIL_INCLUDES += -I$(RAIL_SDK_DIR)/hardware/kit/common/bsp/
-
 # if thunderbird
 #RAIL_INCLUDES += -I$(RAIL_SDK_DIR)/hardware/kit/EFR32MG1_BRD4160A/config/
 

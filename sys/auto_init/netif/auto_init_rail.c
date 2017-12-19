@@ -8,8 +8,7 @@
 #include "debug.h"
 
 #include "log.h"
-#include "net/gnrc/netdev2.h"
-#include "net/gnrc/netdev2/ieee802154.h"
+#include "net/gnrc/netif/ieee802154.h"
 #include "net/gnrc.h"
 
 #include "rail_drv.h"
@@ -17,7 +16,7 @@
 
 #define RAIL_MAC_STACKSIZE      (THREAD_STACKSIZE_DEFAULT)
 #ifndef RAIL_MAC_PRIO
-#define RAIL_MAC_PRIO           (GNRC_NETDEV2_MAC_PRIO)
+#define RAIL_MAC_PRIO           (GNRC_NETIF_PRIO)
 #endif
 
 
@@ -28,13 +27,12 @@
 #define RAIL_802154_2P4GHZ_PARAM_INDEX 0
 
 static rail_t rail_802154_2p4ghz_dev;
-static gnrc_netdev2_t gnrc_802154_2p4ghz_adpt; // todo what does it do?
 static char _rail_802154_2p4ghz_stack[RAIL_MAC_STACKSIZE];
 
 
 void auto_init_rail(void)
 {
-    int ret;
+  
     // there is only on iface atm
     
     DEBUG("[auto_init_netif] called\n");
@@ -47,27 +45,11 @@ void auto_init_rail(void)
     rail_setup(&rail_802154_2p4ghz_dev, (rail_params_t*) p);
     
     // init ieee802154 layer
-    ret = gnrc_netdev2_ieee802154_init(&gnrc_802154_2p4ghz_adpt,
-                                           (netdev2_ieee802154_t *)&rail_802154_2p4ghz_dev);
-                                           
-    if (ret < 0) {
-        LOG_ERROR("[auto_init_netif] error initializing rail radio 802154_2P4GHZ");
-        return ;
-    }
-    // init netdev2
-    
-    kernel_pid_t pid = gnrc_netdev2_init(
-                              _rail_802154_2p4ghz_stack,
-                              RAIL_MAC_STACKSIZE,
-                              RAIL_MAC_PRIO,
-                              "rail 802.15.4 2.4GHz",
-                              &gnrc_802154_2p4ghz_adpt);
-    
-    
-    if (pid == KERNEL_PID_UNDEF) {
-        LOG_ERROR("gnrc_netdev2_init for rail 802.15.4 2.4GHz failed\n");
-        return ;
-    }
+    gnrc_netif_ieee802154_create(_rail_802154_2p4ghz_stack,
+                                     RAIL_MAC_STACKSIZE,
+                                     RAIL_MAC_PRIO, 
+                                     "rail 802.15.4 2.4GHz",
+                                     (netdev_t *)&rail_802154_2p4ghz_dev);
     
 }
 

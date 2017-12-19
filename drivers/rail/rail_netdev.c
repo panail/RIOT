@@ -7,7 +7,7 @@
 #include "em_core.h"
 
 
-#include "net/netdev2.h"
+#include "net/netdev.h"
 #include "net/netopt.h"
 
 #include "ps.h"
@@ -28,12 +28,12 @@
 #include "debug.h"
 
 // local declaration of driver methodes
-static int _send(netdev2_t* netdev, const struct iovec* vector, unsigned count);
-static int _recv(netdev2_t* netdev, void* buf, size_t len, void* info);
-static int _init(netdev2_t* netdev);
-static void _isr(netdev2_t* netdev);
-static int _get(netdev2_t* netdev, netopt_t opt, void* val, size_t max_len);
-static int _set(netdev2_t* netdev, netopt_t opt, void* val, size_t len);
+static int _send(netdev_t* netdev, const struct iovec* vector, unsigned count);
+static int _recv(netdev_t* netdev, void* buf, size_t len, void* info);
+static int _init(netdev_t* netdev);
+static void _isr(netdev_t* netdev);
+static int _get(netdev_t* netdev, netopt_t opt, void* val, size_t max_len);
+static int _set(netdev_t *netdev, netopt_t opt, const void *val, size_t len);
 
 
 static  uint8_t frame[IEEE802154_FRAME_LEN_MAX + 1];
@@ -44,7 +44,7 @@ static const RAIL_CsmaConfig_t csmaConfig = RAIL_CSMA_CONFIG_802_15_4_2003_2p4_G
 // local helper functions
 netopt_state_t _get_state(rail_t* dev);
 
-const netdev2_driver_t rail_driver = {
+const netdev_driver_t rail_driver = {
     .send = _send,
     .recv = _recv,
     .init = _init,
@@ -54,7 +54,7 @@ const netdev2_driver_t rail_driver = {
 };
 
 
-static int _init(netdev2_t* netdev) {
+static int _init(netdev_t* netdev) {
     
     rail_t* dev = (rail_t*) netdev;
     
@@ -96,7 +96,7 @@ static int _init(netdev2_t* netdev) {
 }
 
 
-static int _send(netdev2_t* netdev, const struct iovec* vector, unsigned count) 
+static int _send(netdev_t* netdev, const struct iovec* vector, unsigned count) 
 {
     DEBUG("rail_netdev->send called\n");
     
@@ -149,7 +149,7 @@ static int _send(netdev2_t* netdev, const struct iovec* vector, unsigned count)
     RAIL_TxOptions_t txOption;
     
     // check if ack req
-    if (((netdev2_ieee802154_t *)netdev)->flags & NETDEV2_IEEE802154_ACK_REQ) {
+    if (((netdev_ieee802154_t *)netdev)->flags & NETDEV_IEEE802154_ACK_REQ) {
         txOption.waitForAck =  true;
         DEBUG("tx option auto ack\n");
     } else {
@@ -229,7 +229,7 @@ static int _send(netdev2_t* netdev, const struct iovec* vector, unsigned count)
     return (int) len-1;
 }
 
-static int _recv(netdev2_t* netdev, void* buf, size_t len, void* info)
+static int _recv(netdev_t* netdev, void* buf, size_t len, void* info)
 {
     DEBUG("rail_netdev->recv called\n");
 
@@ -261,7 +261,7 @@ static int _recv(netdev2_t* netdev, void* buf, size_t len, void* info)
     DEBUG("\n");
 */
     if (info != NULL) { 
-        netdev2_ieee802154_rx_info_t* rx_info = info;
+        netdev_ieee802154_rx_info_t* rx_info = info;
         rx_info->rssi = rail_dev->recv_rssi;
         rx_info->lqi = rail_dev->recv_lqi;
     }
@@ -269,13 +269,13 @@ static int _recv(netdev2_t* netdev, void* buf, size_t len, void* info)
     return cpy_size;
 }
 
-static void _isr(netdev2_t* netdev) 
+static void _isr(netdev_t* netdev) 
 {
    DEBUG("rail_netdev->isr called\n");
    // dunno what to do, but call the callback ...
-   netdev->event_callback(netdev, NETDEV2_EVENT_RX_COMPLETE);
+   netdev->event_callback(netdev, NETDEV_EVENT_RX_COMPLETE);
 }
-static int _get(netdev2_t* netdev, netopt_t opt, void* val, size_t max_len) 
+static int _get(netdev_t* netdev, netopt_t opt, void* val, size_t max_len) 
 {
     //DEBUG("rail_netdev->get called opt %s \n", netopt2str(opt));
     
@@ -387,7 +387,7 @@ static int _get(netdev2_t* netdev, netopt_t opt, void* val, size_t max_len)
     //NETOPT_PROTO
     //
     
-    ret = netdev2_ieee802154_get((netdev2_ieee802154_t *)netdev, opt, val, max_len);
+    ret = netdev_ieee802154_get((netdev_ieee802154_t *)netdev, opt, val, max_len);
     
     if (ret != -ENOTSUP) {
         return ret;
@@ -398,7 +398,7 @@ static int _get(netdev2_t* netdev, netopt_t opt, void* val, size_t max_len)
     return ret;
     
 }
-static int _set(netdev2_t* netdev, netopt_t opt, void* val, size_t len)
+static int _set(netdev_t *netdev, netopt_t opt, const void *val, size_t len)
 {
     DEBUG("rail_netdev->set called opt %s \n", netopt2str(opt));
     // bei channel, testen ob channel zur frequenz passt

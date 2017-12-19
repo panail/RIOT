@@ -8,8 +8,8 @@
 #include "board.h"
 #include "periph/spi.h"
 #include "periph/gpio.h"
-#include "net/netdev2.h"
-#include "net/netdev2/ieee802154.h"
+#include "net/netdev.h"
+#include "net/netdev/ieee802154.h"
 #include "net/gnrc/nettype.h"
 #include "net/eui64.h" 
 
@@ -33,8 +33,6 @@ extern "C" {
 #define RAIL_DEFAULT_TXPOWER       (IEEE802154_DEFAULT_TXPOWER)
 
 
-
-
 typedef struct rail_params {
 
     int tmp;
@@ -44,7 +42,7 @@ typedef struct rail_params {
 } rail_params_t;
 
 typedef struct {
-    netdev2_ieee802154_t netdev;
+    netdev_ieee802154_t netdev;
     rail_params_t params;
 
     uint8_t state;              // state of radio

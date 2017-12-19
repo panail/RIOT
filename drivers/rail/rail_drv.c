@@ -3,6 +3,8 @@
 #include <inttypes.h>
 #include <assert.h>
 
+#include "byteorder.h"
+
 #include "radio.h"
 
 // gecko sdk rail lib includes
@@ -82,7 +84,7 @@ static rail_t* _rail_dev = NULL;
 void rail_setup(rail_t* dev, const rail_params_t* params)
 {
     
-    netdev2_t *netdev = (netdev2_t *)dev;
+    netdev_t *netdev = (netdev_t *)dev;
     
     // register driver (defined in rail_netdev)
     netdev->driver = &rail_driver;
@@ -122,7 +124,7 @@ int initPTI(rail_t* dev) {
 int rail_init(rail_t* dev)
 {
 
-    netdev2_ieee802154_t* netdev = (netdev2_ieee802154_t *)dev;
+    netdev_ieee802154_t* netdev = (netdev_ieee802154_t *)dev;
     
     // save ref for this driver
     _rail_dev = dev;
@@ -132,7 +134,7 @@ int rail_init(rail_t* dev)
     DEBUG("rail_init called\n");
     
     // init but what does it do?
-    netdev->flags |= NETDEV2_IEEE802154_SRC_MODE_LONG;
+    netdev->flags |= NETDEV_IEEE802154_SRC_MODE_LONG;
     
     
     // get informations about the used raillib
@@ -262,7 +264,7 @@ int rail_init(rail_t* dev)
     }
 
     // set short addr
-    DEBUG("Set ShortAddr 0x%04x\n", NTOHS(dev->eui.uint16[3].u16));
+    DEBUG("Set ShortAddr 0x%04x\n", ntohs(dev->eui.uint16[3].u16));
     memcpy(netdev->short_addr, &dev->eui.uint16[3].u16, 2);
     bRet = RAIL_IEEE802154_SetShortAddress(dev->eui.uint16[3].u16);
     if (bRet != true) {
@@ -270,7 +272,7 @@ int rail_init(rail_t* dev)
     }
 
     // set long addr
-    DEBUG("Set LongAddr 0x%08lx%08lx\n", NTOHL(dev->eui.uint64.u32[0]), NTOHL(dev->eui.uint64.u32[1]));
+    DEBUG("Set LongAddr 0x%08lx%08lx\n", ntohl(dev->eui.uint64.u32[0]), ntohl(dev->eui.uint64.u32[1]));
 //    network_uint64_t long_addr = byteorder_htonll(dev->eui.uint64);
     memcpy(netdev->long_addr, dev->eui.uint8, 8);
     bRet = RAIL_IEEE802154_SetLongAddress(dev->eui.uint8);
@@ -527,7 +529,7 @@ void RAILCb_RxPacketReceived(void *rxPacketHandle) {
     _rail_dev->recv_taken = true;
 
     // inform the netdev stack of incoming packet 
-    _rail_dev->netdev.netdev.event_callback((netdev2_t*) _rail_dev, NETDEV2_EVENT_ISR);
+    _rail_dev->netdev.netdev.event_callback((netdev_t*) _rail_dev, NETDEV_EVENT_ISR);
 }
 
 

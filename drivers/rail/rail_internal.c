@@ -5,7 +5,6 @@
 #include "pa.h"
 #include "pti.h"
 
-#include "bspconfig.h"
 
 #include "log.h"
 
