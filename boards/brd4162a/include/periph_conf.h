@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Freie Universität Berlin
+ * Copyright (C) 2015-2017 Freie Universität Berlin
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
@@ -31,32 +31,29 @@
 extern "C" {
 #endif
 
-#define SILABS_CONCATOR(str,clock)  str ## _ ## clock
-
-#define SILABS_CLOCK_OSCILLATOR(clock) SILABS_CONCATOR(cmuOsc, clock)
-#define SILABS_CLOCK_SELECT(clock) SILABS_CONCATOR(cmuSelect, clock)
-
-
-
+/**
+ * @brief   Internal macro to calculate *_NUMOF based on config.
+ */
+#define PERIPH_NUMOF(config)    (sizeof(config) / sizeof(config[0]))
 
 /**
- * @brief   Clock configuration
+ * @name    Clock configuration
  * @{
  */
 #ifndef CLOCK_HF
-#define CLOCK_HF            HFXO
+#define CLOCK_HF            cmuSelect_HFXO
 #endif
 #ifndef CLOCK_CORE_DIV
 #define CLOCK_CORE_DIV      cmuClkDiv_1
 #endif
 #ifndef CLOCK_LFA
-#define CLOCK_LFA           LFRCO
-#endif
-#ifndef CLOCK_LFE
-#define CLOCK_LFE           LFRCO
+#define CLOCK_LFA           cmuSelect_LFRCO
 #endif
 #ifndef CLOCK_LFB
-#define CLOCK_LFB           LFRCO
+#define CLOCK_LFB           cmuSelect_LFRCO
+#endif
+#ifndef CLOCK_LFE
+#define CLOCK_LFE           cmuSelect_LFRCO
 #endif
 
 
@@ -111,71 +108,52 @@ extern "C" {
 /** @} */
 
 /**
- * @brief   ADC configuration
+ * @name    ADC configuration
  * @{
  */
 static const adc_conf_t adc_config[] = {
     {
-        ADC0,                               /* device */
-        cmuClock_ADC0,                      /* CMU register */
+        .dev = ADC0,
+        .cmu = cmuClock_ADC0,
     }
 };
 
 static const adc_chan_conf_t adc_channel_config[] = {
     {
-                0,                                  /* device index */
-                adcPosSelTEMP,                      /* channel to use */
-                adcRef1V25,                         /* channel reference */
-                adcAcqTime8                         /* acquisition time */
-            },
-            {
-                0,                                  /* device index */
-                adcPosSelAVDD,                      /* channel to use */
-                adcRef5V,                           /* channel reference */
-                adcAcqTime8                         /* acquisition time */
-            }
+        .dev = 0,
+        .input = adcPosSelTEMP,
+        .reference = adcRef1V25,
+        .acq_time = adcAcqTime8
+    },
+    {
+        .dev = 0,
+        .input = adcPosSelAVDD,
+        .reference = adcRef5V,
+        .acq_time = adcAcqTime8
+    }
 };
 
-#define ADC_NUMOF           (2U)
+#define ADC_DEV_NUMOF       PERIPH_NUMOF(adc_config)
+#define ADC_NUMOF           PERIPH_NUMOF(adc_channel_config)
 /** @} */
 
 /**
- * @brief   DAC configuration
- */
-#define DAC_NUMOF           (0U)
-
-/**
- * @brief   I2C configuration
+ * @name    I2C configuration
  * @{
  */
 static const i2c_conf_t i2c_config[] = {
     {
-            I2C0,                               /* device */
-            GPIO_PIN(PC, 10),                   /* SDA pin */
-            GPIO_PIN(PC, 11),                   /* SCL pin */
-            I2C_ROUTELOC0_SDALOC_LOC15 |
-            I2C_ROUTELOC0_SCLLOC_LOC15,     /* AF location */
-            cmuClock_I2C0,                      /* CMU register */
-            I2C0_IRQn                           /* IRQ base channel */
+        .dev = I2C0,
+        .sda_pin = GPIO_PIN(PC, 10),
+        .scl_pin = GPIO_PIN(PC, 11),
+        .loc = I2C_ROUTELOC0_SDALOC_LOC15 |
+               I2C_ROUTELOC0_SCLLOC_LOC15,
+        .cmu = cmuClock_I2C0,
+        .irq = I2C0_IRQn
     }
 };
 
-#define I2C_NUMOF           (1U)
-#define I2C_0_ISR           isr_i2c0
-/** @} */
-
-/**
- * @brief   PWM configuration
- * @{
- */
-static const pwm_chan_conf_t pwm_channel_config[] = {
-};
-
-static const pwm_conf_t pwm_config[] = {
-};
-
-#define PWM_NUMOF                    (0U)
-
+#define I2C_NUMOF           PERIPH_NUMOF(i2c_config)
 /** @} */
 
 /**
@@ -184,7 +162,7 @@ static const pwm_conf_t pwm_config[] = {
 #define RTC_NUMOF           (1U)
 
 /**
- * @brief   RTT configuration
+ * @name    RTT configuration
  * @{
  */
 #define RTT_NUMOF           (1U)
@@ -194,106 +172,98 @@ static const pwm_conf_t pwm_config[] = {
 /** @} */
 
 /**
- * @brief   SPI configuration
+ * @name    SPI configuration
  * @{
  */
 static const spi_dev_t spi_config[] = {
     {
-USART1,                             /*  device */
-GPIO_PIN(PC, 6),                    /*  MOSI pin */
-GPIO_PIN(PC, 7),                    /*  MISO pin */
-GPIO_PIN(PC, 8),                    /*  CLK pin */
-USART_ROUTELOC0_RXLOC_LOC11 |
-USART_ROUTELOC0_TXLOC_LOC11 |
-USART_ROUTELOC0_CLKLOC_LOC11,   /*  AF location */
-cmuClock_USART1,                    /*  CMU register */
-USART1_RX_IRQn                      /*  IRQ base channel */
-     }
+        .dev = USART1,
+        .mosi_pin = GPIO_PIN(PC, 6),
+        .miso_pin = GPIO_PIN(PC, 7),
+        .clk_pin = GPIO_PIN(PC, 8),
+        .loc = USART_ROUTELOC0_RXLOC_LOC11 |
+               USART_ROUTELOC0_TXLOC_LOC11 |
+               USART_ROUTELOC0_CLKLOC_LOC11,
+        .cmu = cmuClock_USART1,
+        .irq = USART1_RX_IRQn
+    }
 };
-#define SPI_NUMOF           (1U)
 
-#define SPI_0_EN            (1U)
-
+#define SPI_NUMOF           PERIPH_NUMOF(spi_config)
 /** @} */
 
 /**
- * @brief   Timer configuration
+ * @name    Timer configuration
+ *
+ * The implementation uses two timers in cascade mode.
  * @{
  */
 static const timer_conf_t timer_config[] = {
-    
     {
-                {
-                    TIMER0,             /* lower numbered timer */
-                    cmuClock_TIMER0     /* pre-scaler bit in the CMU register */
-                },
-                {
-                    TIMER1,             /* higher numbered timer, this is the one */
-                    cmuClock_TIMER1     /* pre-scaler bit in the CMU register */
-                },
-                TIMER1_IRQn             /* IRQn of the higher numbered timer */
-            }
+        {
+            .dev = TIMER0,
+            .cmu = cmuClock_TIMER0
+        },
+        {
+            .dev = TIMER1,
+            .cmu = cmuClock_TIMER1
+        },
+        .irq = TIMER1_IRQn
+    }
 };
 
-
-#define TIMER_NUMOF         (1U)
+#define TIMER_NUMOF         PERIPH_NUMOF(timer_config)
 #define TIMER_0_ISR         isr_timer1
-#define TIMER_0_MAX_VALUE   (0xffff)
-
 /** @} */
 
 /**
- * @brief   UART configuration
+ * @name    UART configuration
  * @{
  */
 static const uart_conf_t uart_config[] = {
     {
-                USART0,                             /* device */
-                GPIO_PIN(PA, 1),                    /* RX pin */
-                GPIO_PIN(PA, 0),                    /* TX pin */
-                _USART_ROUTELOC0_RXLOC_LOC0 |
-                    _USART_ROUTELOC0_TXLOC_LOC0,     /* AF location */
-                cmuClock_USART0,                    /* CMU register */
-                USART0_RX_IRQn                      /* IRQ base channel */
-            },
-            {
-                USART2,                             /* device */
-                GPIO_PIN(PA, 7),                    /* RX pin */
-                GPIO_PIN(PA, 6),                    /* TX pin */
-                _USART_ROUTELOC0_RXLOC_LOC1 |
-                    _USART_ROUTELOC0_TXLOC_LOC1,     /* AF location */
-                cmuClock_USART0,                    /* CMU register */
-                USART0_RX_IRQn                      /* IRQ base channel */
-            },
-            {
-                USART3,                             /* device */
-                GPIO_PIN(PB, 7),                    /* RX pin */
-                GPIO_PIN(PB, 6),                    /* TX pin */
-                _USART_ROUTELOC0_TXLOC_LOC10 |
-                    _USART_ROUTELOC0_RXLOC_LOC10,    /* AF location */
-                cmuClock_USART1,                    /* CMU register */
-                USART1_RX_IRQn                      /* IRQ base channel */
-            },
-            {
-                LEUART0,                            /* device */
-                GPIO_PIN(PD, 11),                   /* RX pin */
-                GPIO_PIN(PD, 10),                   /* TX pin */
-                LEUART_ROUTELOC0_RXLOC_LOC18 |
-                    LEUART_ROUTELOC0_TXLOC_LOC18,   /* AF location */
-                cmuClock_LEUART0,                   /* CMU register */
-                LEUART0_IRQn                        /* IRQ base channel */
-            }
+        .dev = USART0,
+        .rx_pin = GPIO_PIN(PA, 1),
+        .tx_pin = GPIO_PIN(PA, 0),
+        .loc = USART_ROUTELOC0_RXLOC_LOC0 |
+               USART_ROUTELOC0_TXLOC_LOC0,
+        .cmu = cmuClock_USART0,
+        .irq = USART0_RX_IRQn
+    },
+    {
+        .dev = USART2,
+        .rx_pin = GPIO_PIN(PA, 7),
+        .tx_pin = GPIO_PIN(PA, 6),
+        .loc = USART_ROUTELOC0_RXLOC_LOC1 |
+               USART_ROUTELOC0_TXLOC_LOC1,
+        .cmu = cmuClock_USART2,
+        .irq = USART2_RX_IRQn
+    },
+    {
+        .dev = USART3,
+        .rx_pin = GPIO_PIN(PB, 7),
+        .tx_pin = GPIO_PIN(PB, 6),
+        .loc = USART_ROUTELOC0_RXLOC_LOC10 |
+               USART_ROUTELOC0_TXLOC_LOC10,
+        .cmu = cmuClock_USART3,
+        .irq = USART3_RX_IRQn
+    },
+    {
+        .dev = LEUART0,
+        .rx_pin = GPIO_PIN(PD, 11),
+        .tx_pin = GPIO_PIN(PD, 10),
+        .loc = LEUART_ROUTELOC0_RXLOC_LOC18 |
+               LEUART_ROUTELOC0_TXLOC_LOC18,
+        .cmu = cmuClock_LEUART0,
+        .irq = LEUART0_IRQn
+    }
 };
 
-
-#define UART_NUMOF          (4U)
+#define UART_NUMOF          PERIPH_NUMOF(uart_config)
 #define UART_0_ISR_RX       isr_usart0_rx
-#define UART_1_ISR_RX       isr_usart1_rx
-#define UART_2_ISR_RX       isr_usart2_rx
+#define UART_1_ISR_RX       isr_usart2_rx
+#define UART_2_ISR_RX       isr_usart3_rx
 #define UART_3_ISR_RX       isr_leuart0
-
-
-
 /** @} */
 
 #ifdef __cplusplus

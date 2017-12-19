@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Bas Stottelaar <basstottelaar@gmail.com>
+ * Copyright (C) 2016-2017 Bas Stottelaar <basstottelaar@gmail.com>
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
@@ -13,7 +13,6 @@
  * @file
  * @brief       Board specific configuration of direct mapped GPIOs
  *
- * @author      Kai Beckmann <kai.beckmann@hs-rm.de>
  * @author      Bas Stottelaar <basstottelaar@gmail.com>
  */
 
@@ -45,12 +44,14 @@ static const  saul_gpio_params_t saul_gpio_params[] =
     {
         .name = "Button 1",
         .pin = PB0_PIN,
-        .mode = GPIO_IN_PU
+        .mode = GPIO_IN_PU,
+        .flags = SAUL_GPIO_INVERTED
     },
     {
         .name = "Button 2",
         .pin = PB1_PIN,
-        .mode = GPIO_IN_PU
+        .mode = GPIO_IN_PU,
+        .flags = SAUL_GPIO_INVERTED
     }
 };
 

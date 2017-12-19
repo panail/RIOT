@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hochschule RheinMain
+ * Copyright (C) 2015-2017 Freie Universität Berlin
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
@@ -40,48 +40,49 @@ extern "C" {
 #endif
 
 /**
- * @brief   Xtimer configuration.
- * @note    The timer runs at 250 KHz to increase accuracy.
+ * @name    Xtimer configuration
+ *
+ * The timer runs at 250 KHz to increase accuracy.
  * @{
  */
 #define XTIMER_HZ           (250000UL)
-#define XTIMER_SHIFT        (2)
 #define XTIMER_WIDTH        (16)
 /** @} */
 
 /**
- * @brief   Define for enabling Advanced Energy Monitor core output via SWO.
+ * @name    Enable Advanced Energy Monitor
+ *
+ * When enabled, additional CPU statistics are available via SWO.
  * @{
  */
-/*
 #ifndef AEM_ENABLED
-#define AEM_ENABLED                 (1)
+#define AEM_ENABLED         (1)
 #endif
-* */
 /** @} */
 
 /**
- * @brief   GPIO pin for enabling communication through the board controller.
+ * @name    Board controller configuration
+ *
+ * Define the GPIO pin to enable the BC, to allow serial communication
+ * via the USB port.
  * @{
  */
 #ifndef BC_ENABLED
-#define BC_ENABLED                  (1)
+#define BC_ENABLED          (1)
 #endif
-
 #define BC_PIN              GPIO_PIN(PA, 5)
 /** @} */
 
 /**
- * @brief   Push button pin definitions.
+ * @name    Push button pin definitions
  * @{
  */
- 
 #define PB0_PIN             GPIO_PIN(PF, 6)
 #define PB1_PIN             GPIO_PIN(PF, 7)
 /** @} */
 
 /**
- * @brief    LED pin definitions.
+ * @name    LED pin definitions
  * @{
  */
 #define LED0_PIN            GPIO_PIN(PF, 4)
@@ -89,7 +90,7 @@ extern "C" {
 /** @} */
 
 /**
- * @brief   Macros for controlling the on-board LEDs.
+ * @name    Macros for controlling the on-board LEDs
  * @{
  */
 #define LED0_ON             gpio_set(LED0_PIN)
@@ -99,7 +100,6 @@ extern "C" {
 #define LED1_OFF            gpio_clear(LED1_PIN)
 #define LED1_TOGGLE         gpio_toggle(LED1_PIN)
 /** @} */
-
 
 /**
  * @brief   Initialize the board (GPIO, sensors, clocks).
