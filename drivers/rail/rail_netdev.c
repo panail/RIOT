@@ -400,7 +400,10 @@ static int _get(netdev_t* netdev, netopt_t opt, void* val, size_t max_len)
 }
 static int _set(netdev_t *netdev, netopt_t opt, const void *val, size_t len)
 {
-    DEBUG("rail_netdev->set called opt %s \n", netopt2str(opt));
+    // make gcc happy
+    netdev = netdev;
+    len = len;
+    DEBUG("rail_netdev->set called opt %s val %p \n", netopt2str(opt), val);
     // bei channel, testen ob channel zur frequenz passt
     return 0;
 }

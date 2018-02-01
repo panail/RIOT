@@ -99,7 +99,7 @@ void rail_setup(rail_t* dev, const rail_params_t* params)
     dev->state = RAIL_TRANSCEIVER_STATE_UNINITIALISIED;
     
     // init other hal stuff
-    rail_internal_init_radio_hal(params);
+//    rail_internal_init_radio_hal(params);
     
     //// init radio
   //  RAIL_RfIdle();
@@ -111,6 +111,8 @@ void rail_setup(rail_t* dev, const rail_params_t* params)
 #if (PTI_ENABLED == 1)
 int initPTI(rail_t* dev) {
 
+    // make gcc happy
+    dev = dev;
     // init gpio for output
 
     RADIO_PTIInit_t ptiInit = RADIO_PTI_INIT;
@@ -688,6 +690,8 @@ void RAILCb_TimerExpired(void)
  */
 void RAILCb_TxFifoAlmostEmpty(uint16_t spaceAvailable)
 {
+    // make gcc happy
+    spaceAvailable = spaceAvailable;
     DEBUG("RailCB TxFifoAlmostEmpty\n");
 }
 
@@ -738,6 +742,8 @@ void RAILCb_RxFifoAlmostFull(uint16_t bytesAvailable)
  */
 void RAILCb_IEEE802154_DataRequestCommand(RAIL_IEEE802154_Address_t *address)
 {
+    // make gcc happy
+    address = address;
     DEBUG("RailCB DataRequestCommand \n");
 }
 
