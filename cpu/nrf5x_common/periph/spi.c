@@ -8,6 +8,7 @@
 
 /**
  * @ingroup     cpu_nrf5x_common
+ * @ingroup     drivers_periph_spi
  * @{
  *
  * @file
@@ -25,8 +26,6 @@
 #include "assert.h"
 #include "periph/spi.h"
 #include "periph/gpio.h"
-
-#ifdef SPI_NUMOF
 
 /**
  * @brief   array holding one pre-initialized mutex for each SPI device
@@ -62,6 +61,8 @@ void spi_init_pins(spi_t bus)
 
 int spi_acquire(spi_t bus, spi_cs_t cs, spi_mode_t mode, spi_clk_t clk)
 {
+    (void) cs;
+
     mutex_lock(&locks[bus]);
 #ifdef CPU_FAM_NRF51
     /* power on the bus (NRF51 only) */
@@ -89,8 +90,8 @@ void spi_release(spi_t bus)
 void spi_transfer_bytes(spi_t bus, spi_cs_t cs, bool cont,
                         const void *out, void *in, size_t len)
 {
-    uint8_t *in_buf = (uint8_t *)in;
-    uint8_t *out_buf = (uint8_t *)out;
+    const uint8_t *out_buf = out;
+    uint8_t *in_buf = in;
 
     assert(out_buf || in_buf);
 
@@ -115,5 +116,3 @@ void spi_transfer_bytes(spi_t bus, spi_cs_t cs, bool cont,
         gpio_set((gpio_t)cs);
     }
 }
-
-#endif /* SPI_NUMOF */

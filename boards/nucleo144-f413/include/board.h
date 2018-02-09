@@ -8,9 +8,9 @@
  */
 
 /**
- * @defgroup    boards_nucleo144-f413 Nucleo-F413
- * @ingroup     boards
- * @brief       Board specific files for the nucleo144-f413 board
+ * @defgroup    boards_nucleo144-f413 Nucleo144-F413
+ * @ingroup     boards_nucleo144
+ * @brief       Board specific files for the STM Nucleo144-f413 board
  * @{
  *
  * @file
@@ -33,8 +33,6 @@ extern "C" {
  * @name    xtimer configuration
  * @{
  */
-#define XTIMER_DEV          TIMER_DEV(0)
-#define XTIMER_CHAN         (0)
 #define XTIMER_OVERHEAD     (6)
 #define XTIMER_BACKOFF      (5)
 /** @} */

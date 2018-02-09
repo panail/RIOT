@@ -199,17 +199,17 @@ static const char _riot[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-static inline void lock(pcd8544_t *dev)
+static inline void lock(const pcd8544_t *dev)
 {
     spi_acquire(dev->spi, dev->cs, SPI_MODE, SPI_CLK);
 }
 
-static inline void done(pcd8544_t *dev)
+static inline void done(const pcd8544_t *dev)
 {
     spi_release(dev->spi);
 }
 
-static void _write(pcd8544_t *dev, uint8_t is_data, char data)
+static void _write(const pcd8544_t *dev, uint8_t is_data, char data)
 {
     /* set command or data mode */
     gpio_write(dev->mode, is_data);
@@ -217,12 +217,12 @@ static void _write(pcd8544_t *dev, uint8_t is_data, char data)
     spi_transfer_bytes(dev->spi, dev->cs, false, (uint8_t *)&data, NULL, 1);
 }
 
-static inline void _set_x(pcd8544_t *dev, uint8_t x)
+static inline void _set_x(const pcd8544_t *dev, uint8_t x)
 {
     _write(dev, MODE_CMD, CMD_SET_X | x);
 }
 
-static inline void _set_y(pcd8544_t *dev, uint8_t y)
+static inline void _set_y(const pcd8544_t *dev, uint8_t y)
 {
     _write(dev, MODE_CMD, CMD_SET_Y | y);
 }
@@ -266,7 +266,7 @@ int pcd8544_init(pcd8544_t *dev, spi_t spi, gpio_t cs, gpio_t reset, gpio_t mode
     return 0;
 }
 
-void pcd8544_set_contrast(pcd8544_t *dev, uint8_t contrast)
+void pcd8544_set_contrast(const pcd8544_t *dev, uint8_t contrast)
 {
     if (contrast > CONTRAST_MAX) {
         contrast = CONTRAST_MAX;
@@ -278,7 +278,7 @@ void pcd8544_set_contrast(pcd8544_t *dev, uint8_t contrast)
     done(dev);
 }
 
-void pcd8544_set_tempcoef(pcd8544_t *dev, uint8_t coef)
+void pcd8544_set_tempcoef(const pcd8544_t *dev, uint8_t coef)
 {
     if (coef > TEMP_MAX) {
         coef = TEMP_MAX;
@@ -290,7 +290,7 @@ void pcd8544_set_tempcoef(pcd8544_t *dev, uint8_t coef)
     done(dev);
 }
 
-void pcd8544_set_bias(pcd8544_t *dev, uint8_t bias)
+void pcd8544_set_bias(const pcd8544_t *dev, uint8_t bias)
 {
     if (bias > BIAS_MAX) {
         bias = BIAS_MAX;
@@ -302,25 +302,25 @@ void pcd8544_set_bias(pcd8544_t *dev, uint8_t bias)
     done(dev);
 }
 
-void pcd8544_riot(pcd8544_t *dev)
+void pcd8544_riot(const pcd8544_t *dev)
 {
     pcd8544_write_img(dev, _riot);
 }
 
-void pcd8544_write_img(pcd8544_t *dev, const char img[])
+void pcd8544_write_img(const pcd8544_t *dev, const char img[])
 {
     /* set initial position */
     lock(dev);
     _set_x(dev, 0);
     _set_y(dev, 0);
     /* write image data to display */
-    for (int i = 0; i < (PCD8544_RES_X * PCD8544_RES_Y / 8); i++) {
+    for (unsigned i = 0; i < (PCD8544_RES_X * PCD8544_RES_Y / 8); i++) {
         _write(dev, MODE_DTA, img[i]);
     }
     done(dev);
 }
 
-void pcd8544_write_c(pcd8544_t *dev, uint8_t x, uint8_t y, char c)
+void pcd8544_write_c(const pcd8544_t *dev, uint8_t x, uint8_t y, char c)
 {
     /* check position */
     if (x >= PCD8544_COLS || y >= PCD8544_ROWS) {
@@ -331,26 +331,26 @@ void pcd8544_write_c(pcd8544_t *dev, uint8_t x, uint8_t y, char c)
     _set_x(dev, x * CHAR_WIDTH);
     _set_y(dev, y);
     /* write char */
-    for (int i = 0; i < CHAR_WIDTH - 1; i++) {
+    for (unsigned i = 0; i < CHAR_WIDTH - 1; i++) {
         _write(dev, MODE_DTA, _ascii[c - ASCII_MIN][i]);
     }
     _write(dev, MODE_DTA, 0x00);
     done(dev);
 }
 
-void pcd8544_write_s(pcd8544_t *dev, uint8_t x, uint8_t y, const char *s)
+void pcd8544_write_s(const pcd8544_t *dev, uint8_t x, uint8_t y, const char *s)
 {
     for (; (*s != '\0') && x < PCD8544_COLS; x++, s++) {
         pcd8544_write_c(dev, x, y, *s);
     }
 }
 
-void pcd8544_clear(pcd8544_t *dev)
+void pcd8544_clear(const pcd8544_t *dev)
 {
     lock(dev);
     _set_x(dev, 0);
     _set_y(dev, 0);
-    for (int i = 0; i < PCD8544_RES_X * PCD8544_ROWS; i++) {
+    for (unsigned i = 0; i < PCD8544_RES_X * PCD8544_ROWS; i++) {
         _write(dev, MODE_DTA, 0x00);
     }
     done(dev);
@@ -369,19 +369,19 @@ void pcd8544_invert(pcd8544_t *dev)
     done(dev);
 }
 
-int pcd8544_is_inverted(pcd8544_t *dev)
+int pcd8544_is_inverted(const pcd8544_t *dev)
 {
     return dev->inverted;
 }
 
-void pcd8544_poweron(pcd8544_t *dev)
+void pcd8544_poweron(const pcd8544_t *dev)
 {
     lock(dev);
     _write(dev, MODE_CMD, CMD_ENABLE_H);
     done(dev);
 }
 
-void pcd8544_poweroff(pcd8544_t *dev)
+void pcd8544_poweroff(const pcd8544_t *dev)
 {
     lock(dev);
     _write(dev, MODE_CMD, CMD_DISABLE);

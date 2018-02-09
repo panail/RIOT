@@ -8,14 +8,12 @@
  */
 
 /**
- * @ingroup     cpu_nrf51822
+ * @ingroup     cpu_nrf51
+ * @ingroup     drivers_periph_adc
  * @{
  *
  * @file
  * @brief       Low-level ADC driver implementation
- *
- * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
- * @author      Ludwig Knüpfer <ludwig.knuepfer@fu-berlin.de>
  *
  * @}
  */
@@ -25,7 +23,6 @@
 #include "periph/adc.h"
 #include "periph_conf.h"
 
-#ifdef ADC_CONFIG
 /**
  * @brief   Load the ADC configuration
  */
@@ -87,7 +84,3 @@ int adc_sample(adc_t line, adc_res_t res)
 
     return val;
 }
-
-#else
-typedef int dont_be_pedantic;
-#endif /* ADC_CONFIG */

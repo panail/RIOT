@@ -29,6 +29,11 @@ extern "C" {
 #endif
 
 /**
+ * @brief   Starting address of the CPU ID
+ */
+#define CPUID_ADDR          (0x1ff80050)
+
+/**
  * @brief   Available ports on the STM32L0 family
  */
 enum {
@@ -66,12 +71,16 @@ typedef struct {
 } adc_conf_t;
 
 /**
- * @brief   DAC line configuration data
+ * @brief   I2C configuration data structure
  */
 typedef struct {
-    gpio_t pin;             /**< pin connected to the line */
-    uint8_t chan;           /**< DAC device used for this line */
-} dac_conf_t;
+    I2C_TypeDef *dev;       /**< i2c device */
+    gpio_t scl;             /**< scl pin number */
+    gpio_t sda;             /**< sda pin number */
+    gpio_mode_t pin_mode;   /**< with or without pull resistor */
+    gpio_af_t af;           /**< I2C alternate function value */
+    uint8_t ev_irqn;        /**< event IRQ */
+} i2c_conf_t;
 
 #ifdef __cplusplus
 }

@@ -48,8 +48,6 @@ extern "C" {
  * @name    Xtimer configuration
  * @{
  */
-#define XTIMER_DEV                  (0)
-#define XTIMER_CHAN                 (0)
 #define XTIMER_WIDTH                (16)
 #define XTIMER_BACKOFF              (40)
 /** @} */
@@ -72,14 +70,14 @@ extern "C" {
  * @name    LED pin definitions and handlers
  * @{
  */
-#define LED0_PIN                    GPIO_PIN(4, 0)
-#define LED1_PIN                    GPIO_PIN(4, 1)
-#define LED2_PIN                    GPIO_PIN(4, 2)
+#define LED0_PIN                    GPIO_PIN(5, 4)
+#define LED1_PIN                    GPIO_PIN(5, 6)
+#define LED2_PIN                    GPIO_PIN(5, 5)
 
 #define LED_OUT_REG                 P5OUT
 #define LED0_MASK                   (0x10)
-#define LED1_MASK                   (0x20)
-#define LED2_MASK                   (0x40)
+#define LED1_MASK                   (0x40)
+#define LED2_MASK                   (0x20)
 
 #define LED0_ON                     (LED_OUT_REG &=~LED0_MASK)
 #define LED0_OFF                    (LED_OUT_REG |= LED0_MASK)
@@ -98,11 +96,12 @@ extern "C" {
  * @name    User button configuration
  * @{
  */
-#define USER_BTN_PxIN      P2IN
-#define USER_BTN_MASK      0x20
+#define BTN0_PIN            P2IN
+#define BTN0_MASK           (0x20)
+#define BTN0_MODE           GPIO_IN
 
-#define USER_BTN_PRESSED   ((USER_BTN_PxIN & USER_BTN_MASK) == 0)
-#define USER_BTN_RELEASED  ((USER_BTN_PxIN & USER_BTN_MASK) != 0)
+#define BTN0_PRESSED        ((BTN0_PIN & BTN0_MASK) == 0)
+#define BTN0_RELEASED       ((BTN0_PIN & BTN0_MASK) != 0)
 /** @} */
 
 /**

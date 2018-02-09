@@ -10,9 +10,10 @@
  * @defgroup    drivers_periph_pm Power Management
  * @ingroup     drivers_periph
  * @brief       The kernels power management interface
- * @{
  *
- * This interface *must* be implemented for every platform in RIOT.
+ * @attention This interface *must* be implemented for every platform in RIOT.
+ *
+ * @{
  *
  * @file
  * @brief       Power management interface
@@ -26,8 +27,12 @@
 #include "assert.h"
 #include "periph_cpu.h"
 
+#ifdef MODULE_PM_LAYERED
+#include "pm_layered.h"
+#endif
+
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /**

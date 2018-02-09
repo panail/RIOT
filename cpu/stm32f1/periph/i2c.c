@@ -7,7 +7,8 @@
  */
 
 /**
- * @addtogroup  driver_periph
+ * @ingroup     cpu_stm32f1
+ * @ingroup     drivers_periph_i2c
  * @{
  *
  * @file
@@ -35,9 +36,6 @@
 
 #define ENABLE_DEBUG    (0)
 #include "debug.h"
-
-/* guard file in case no I2C device is defined */
-#if I2C_0_EN || I2C_1_EN
 
 /* static function definitions */
 static void _i2c_init(I2C_TypeDef *i2c, int ccr);
@@ -547,5 +545,3 @@ void I2C_1_ERR_ISR(void)
     i2c_irq_handler(I2C_1, I2C_1_DEV);
 }
 #endif
-
-#endif /* I2C_0_EN || I2C_1_EN */

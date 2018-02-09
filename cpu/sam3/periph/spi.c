@@ -9,6 +9,7 @@
 
 /**
  * @ingroup     cpu_sam3
+ * @ingroup     drivers_periph_spi
  * @{
  *
  * @file
@@ -63,6 +64,7 @@ void spi_init_pins(spi_t bus)
 
 int spi_acquire(spi_t bus, spi_cs_t cs, spi_mode_t mode, spi_clk_t clk)
 {
+    (void) cs;
     /* lock bus */
     mutex_lock(&locks[bus]);
     /* enable SPI device clock */
@@ -87,8 +89,8 @@ void spi_release(spi_t bus)
 void spi_transfer_bytes(spi_t bus, spi_cs_t cs, bool cont,
                         const void *out, void *in, size_t len)
 {
-    uint8_t *out_buf = (uint8_t *)out;
-    uint8_t *in_buf = (uint8_t *)in;
+    const uint8_t *out_buf = out;
+    uint8_t *in_buf = in;
 
     assert(in_buf || out_buf);
 

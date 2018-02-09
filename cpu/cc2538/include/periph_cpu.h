@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Freie Universität Berlin
+ *               2017 HAW Hamburg
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
@@ -7,19 +8,21 @@
  */
 
 /**
- * @ingroup         cpu_cc2538
+ * @ingroup     cpu_cc2538
  * @{
  *
  * @file
- * @brief           CPU specific definitions for internal peripheral handling
+ * @brief       CPU specific definitions for internal peripheral handling
  *
- * @author          Hauke Petersen <hauke.petersen@fu-berlin.de>
+ * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
+ * @author      Sebastian Meiling <s@mlng.net>
  */
 
 #ifndef PERIPH_CPU_H
 #define PERIPH_CPU_H
 
 #include <stdint.h>
+#include <stdio.h>
 
 #include "cpu.h"
 
@@ -31,13 +34,14 @@ extern "C" {
  * @brief   Starting offset of CPU_ID
  */
 #define CPUID_ADDR          (&IEEE_ADDR_MSWORD)
+
 /**
  * @brief   Length of the CPU_ID in octets
  */
 #define CPUID_LEN           (8U)
 
 /**
- * @brief   Define a custom type for GPIO pins
+ * @name    Define a custom type for GPIO pins
  * @{
  */
 #define HAVE_GPIO_T
@@ -45,17 +49,34 @@ typedef uint32_t gpio_t;
 /** @} */
 
 /**
+ * @name    Power management configuration
+ * @{
+ */
+#define PROVIDES_PM_SET_LOWEST_CORTEXM
+/** @} */
+
+/**
+ * @brief Define custom value to speficy undefined or unused GPIOs
+ */
+#define GPIO_UNDEF          (0xffffffff)
+
+/**
  * @brief   Define a custom GPIO_PIN macro
  *
  * For the CC2538, we use OR the gpio ports base register address with the
  * actual pin number.
  */
-#define GPIO_PIN(port, pin) (gpio_t)(((uint32_t)GPIO_A + (port << 12)) | pin)
+#define GPIO_PIN(port, pin) (gpio_t)(((uint32_t)GPIO_BASE + \
+                                      (port << GPIO_PORTNUM_SHIFT)) | pin)
 
 /**
- * @brief   Define a custom GPIO_UNDEF value
+ * @brief   Configure an alternate function for the given pin
+ *
+ * @param[in] pin   gpio pin
+ * @param[in] sel   Select pin peripheral function
+ * @param[in] over  Override pin configuration
  */
-#define GPIO_UNDEF 99
+void gpio_init_af(gpio_t pin, uint8_t sel, uint8_t over);
 
 /**
  * @brief   I2C configuration options
@@ -66,7 +87,7 @@ typedef struct {
 } i2c_conf_t;
 
 /**
- * @brief declare needed generic SPI functions
+ * @name declare needed generic SPI functions
  * @{
  */
 #define PERIPH_SPI_NEEDS_INIT_CS
@@ -76,22 +97,23 @@ typedef struct {
 /** @} */
 
 /**
- * @brief   Override the default GPIO mode settings
+ * @name   Override the default GPIO mode settings
  * @{
  */
 #define HAVE_GPIO_MODE_T
 typedef enum {
-    GPIO_IN    = ((uint8_t)0x00),               /**< input, no pull */
-    GPIO_IN_PD = ((uint8_t)IOC_OVERRIDE_PDE),   /**< input, pull-down */
-    GPIO_IN_PU = ((uint8_t)IOC_OVERRIDE_PUE),   /**< input, pull-up */
-    GPIO_OUT   = ((uint8_t)IOC_OVERRIDE_OE),    /**< output */
-    GPIO_OD    = (0xff),                        /**< not supported */
-    GPIO_OD_PU = (0xff)                         /**< not supported */
+    GPIO_IN         = ((uint8_t)OVERRIDE_DISABLE),      /**< input, no pull */
+    GPIO_IN_ANALOG  = ((uint8_t)OVERRIDE_ANALOG),       /**< input, analog */
+    GPIO_IN_PD      = ((uint8_t)OVERRIDE_PULLDOWN),     /**< input, pull-down */
+    GPIO_IN_PU      = ((uint8_t)OVERRIDE_PULLUP),       /**< input, pull-up */
+    GPIO_OUT        = ((uint8_t)OVERRIDE_ENABLE),       /**< output */
+    GPIO_OD         = (0xff),                           /**< not supported */
+    GPIO_OD_PU      = (0xff)                            /**< not supported */
 } gpio_mode_t;
 /** @} */
 
 /**
- * @brief   Override SPI mode settings
+ * @name   Override SPI mode settings
  * @{
  */
 #define HAVE_SPI_MODE_T
@@ -104,7 +126,7 @@ typedef enum {
 /** @ */
 
 /**
- * @brief   Override SPI clock settings
+ * @name   Override SPI clock settings
  * @{
  */
 #define HAVE_SPI_CLK_T
@@ -126,7 +148,7 @@ typedef struct {
 } spi_clk_conf_t;
 
 /**
- * @brief   SPI configuration data structure
+ * @name    SPI configuration data structure
  * @{
  */
 typedef struct {
@@ -139,13 +161,80 @@ typedef struct {
 /** @} */
 
 /**
- * @brief   Timer configuration data
+ * @brief   Timer configuration
+ *
+ * General purpose timers (GPT[0-3]) are configured consecutively and in order
+ * (without gaps) starting from GPT0, i.e. if multiple timers are enabled.
  */
 typedef struct {
-    cc2538_gptimer_t *dev;  /**< timer device */
-    uint_fast8_t channels;  /**< number of channels */
-    uint_fast8_t cfg;       /**< timer config word */
+    uint_fast8_t chn;   /**< number of channels */
+    uint_fast8_t cfg;   /**< timer config word */
 } timer_conf_t;
+
+/**
+ * @name   Override resolution options
+ * @{
+ */
+#define HAVE_ADC_RES_T
+typedef enum {
+    ADC_RES_6BIT  =             (0xa00),    /**< not supported by hardware */
+    ADC_RES_7BIT  =             (0 << 4),   /**< ADC resolution: 7 bit */
+    ADC_RES_8BIT  =             (0xb00),    /**< not supported by hardware */
+    ADC_RES_9BIT  =             (1 << 4),   /**< ADC resolution: 9 bit */
+    ADC_RES_10BIT =             (2 << 4),   /**< ADC resolution: 10 bit */
+    ADC_RES_12BIT =             (3 << 4),   /**< ADC resolution: 12 bit */
+    ADC_RES_14BIT =             (0xc00),    /**< not supported by hardware */
+    ADC_RES_16BIT =             (0xd00),    /**< not supported by hardware */
+} adc_res_t;
+/** @} */
+
+/**
+ * @brief ADC configuration wrapper
+ */
+typedef gpio_t adc_conf_t;
+
+/**
+ * @name SOC_ADC_ADCCON3 register bit masks
+ * @{
+ */
+#define SOC_ADC_ADCCON3_EREF    (0x000000C0) /**< Reference voltage for extra */
+#define SOC_ADC_ADCCON3_EDIV    (0x00000030) /**< Decimation rate for extra */
+#define SOC_ADC_ADCCON3_ECH     (0x0000000F) /**< Single channel select */
+/** @} */
+
+/**
+ * @name SOC_ADC_ADCCONx registers field values
+ * @{
+ */
+#define SOC_ADC_ADCCON_REF_INT      (0 << 6)    /**< Internal reference */
+#define SOC_ADC_ADCCON_REF_EXT      (1 << 6)    /**< External reference on AIN7 pin */
+#define SOC_ADC_ADCCON_REF_AVDD5    (2 << 6)    /**< AVDD5 pin */
+#define SOC_ADC_ADCCON_REF_DIFF     (3 << 6)    /**< External reference on AIN6-AIN7 differential input */
+#define SOC_ADC_ADCCON_CH_GND       (0xC)       /**< GND */
+/** @} */
+
+/**
+ * @brief Mask to check end-of-conversion (EOC) bit
+ */
+#define SOC_ADC_ADCCON1_EOC_MASK    (0x80)
+
+/**
+ * @name Masks for ADC raw data
+ * @{
+ */
+#define SOC_ADC_ADCL_MASK       (0x000000FC)
+#define SOC_ADC_ADCH_MASK       (0x000000FF)
+/** @} */
+
+/**
+ * @name Bit shift for data per ADC resolution
+ * @{
+ */
+#define SOCADC_7_BIT_RSHIFT     (9U) /**< Mask for getting data( 7 bits ENOB) */
+#define SOCADC_9_BIT_RSHIFT     (7U) /**< Mask for getting data( 9 bits ENOB) */
+#define SOCADC_10_BIT_RSHIFT    (6U) /**< Mask for getting data(10 bits ENOB) */
+#define SOCADC_12_BIT_RSHIFT    (4U) /**< Mask for getting data(12 bits ENOB) */
+/** @} */
 
 #ifdef __cplusplus
 }

@@ -14,6 +14,7 @@
  * @brief     Board specific configuration of direct mapped GPIOs
  *
  * @author    Hauke Petersen <hauke.petersen@fu-berlin.de>
+ * @author    Sebastian Meiling <s@mlng.net>
  */
 
 #ifndef GPIO_PARAMS_H
@@ -32,14 +33,16 @@ extern "C" {
 static const saul_gpio_params_t saul_gpio_params[] =
 {
     {
-        .name = "Button A",
-        .pin = BTN0_PIN,
-        .mode = GPIO_IN
+        .name  = "Button A",
+        .pin   = BTN0_PIN,
+        .mode  = BTN0_MODE,
+        .flags = SAUL_GPIO_INVERTED,
     },
     {
-        .name = "Button B",
-        .pin = BTN1_PIN,
-        .mode = GPIO_IN
+        .name  = "Button B",
+        .pin   = BTN1_PIN,
+        .mode  = BTN1_MODE,
+        .flags = SAUL_GPIO_INVERTED,
     },
 };
 

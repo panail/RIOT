@@ -26,6 +26,11 @@ extern "C" {
 #endif
 
 /**
+ * @brief   Starting address of the CPU ID
+ */
+#define CPUID_ADDR          (0x1fff7a10)
+
+/**
  * @brief   Available ports on the STM32F4 family
  */
 enum {
@@ -74,14 +79,6 @@ typedef struct {
     uint8_t dev;            /**< ADCx - 1 device used for the channel */
     uint8_t chan;           /**< CPU ADC channel connected to the pin */
 } adc_conf_t;
-
-/**
- * @brief   DAC line configuration data
- */
-typedef struct {
-    gpio_t pin;             /**< pin connected to the line */
-    uint8_t chan;           /**< DAC device used for this line */
-} dac_conf_t;
 
 /**
  * @brief   Power on the DMA device the given stream belongs to

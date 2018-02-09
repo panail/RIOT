@@ -9,19 +9,20 @@
 /**
  * @defgroup    boards_nrf52840dk nRF52840 DK
  * @ingroup     boards
+ * @brief       Board specific configuration for the nRF52840 DK
  * @{
  *
  * @file
  * @brief       Board specific configuration for the nRF52840 DK
  *
  * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
- *
+ * @author      Sebastian Meiling <s@mlng.net>
  */
 
 #ifndef BOARD_H
 #define BOARD_H
 
-#include "cpu.h"
+#include "board_common.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,6 +42,7 @@ extern "C" {
 #define LED1_MASK           (1 << 14)
 #define LED2_MASK           (1 << 15)
 #define LED3_MASK           (1 << 16)
+#define LED_MASK            (LED0_MASK | LED1_MASK | LED2_MASK | LED3_MASK)
 
 #define LED0_ON             (LED_PORT->OUTCLR = LED0_MASK)
 #define LED0_OFF            (LED_PORT->OUTSET = LED0_MASK)
@@ -63,16 +65,15 @@ extern "C" {
  * @name    Button pin configuration
  * @{
  */
-#define BUTTON1_PIN         (GPIO_PIN(0, 11))
-#define BUTTON2_PIN         (GPIO_PIN(0, 12))
-#define BUTTON3_PIN         (GPIO_PIN(0, 24))
-#define BUTTON4_PIN         (GPIO_PIN(0, 25))
+#define BTN0_PIN            GPIO_PIN(0, 11)
+#define BTN0_MODE           GPIO_IN_PU
+#define BTN1_PIN            GPIO_PIN(0, 12)
+#define BTN1_MODE           GPIO_IN_PU
+#define BTN2_PIN            GPIO_PIN(0, 24)
+#define BTN2_MODE           GPIO_IN_PU
+#define BTN3_PIN            GPIO_PIN(0, 25)
+#define BTN3_MODE           GPIO_IN_PU
 /** @} */
-
-/**
- * @brief   Initialize board specific hardware, including clock, LEDs and std-IO
- */
-void board_init(void);
 
 #ifdef __cplusplus
 }

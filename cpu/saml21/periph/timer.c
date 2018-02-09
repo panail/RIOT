@@ -10,7 +10,8 @@
  */
 
 /**
- * @ingroup     driver_periph
+ * @ingroup     cpu_saml21
+ * @ingroup     drivers_periph_timer
  * @{
  *
  * @file        timer.c
@@ -47,6 +48,10 @@ static inline void _irq_enable(tim_t dev);
  */
 int timer_init(tim_t dev, unsigned long freq, timer_cb_t cb, void *arg)
 {
+    /* at the moment, the timer can only run at 1MHz */
+    if (freq != 1000000ul) {
+        return -1;
+    }
     /* configure GCLK0 to feed TC0 & TC1*/;
     GCLK->PCHCTRL[TC0_GCLK_ID].reg |= GCLK_PCHCTRL_CHEN | GCLK_PCHCTRL_GEN_GCLK0;
     while (!(GCLK->PCHCTRL[TC0_GCLK_ID].reg & GCLK_PCHCTRL_CHEN)) {}
@@ -82,11 +87,6 @@ int timer_init(tim_t dev, unsigned long freq, timer_cb_t cb, void *arg)
     timer_start(dev);
 
     return 0;
-}
-
-int timer_set(tim_t dev, int channel, unsigned int timeout)
-{
-    return timer_set_absolute(dev, channel, timer_read(dev) + timeout);
 }
 
 int timer_set_absolute(tim_t dev, int channel, unsigned int value)

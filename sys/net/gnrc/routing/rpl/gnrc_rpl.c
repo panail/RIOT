@@ -16,7 +16,7 @@
 
 #include "net/icmpv6.h"
 #include "net/ipv6.h"
-#include "net/gnrc/ipv6/netif.h"
+#include "net/gnrc/netif/internal.h"
 #include "net/gnrc.h"
 #include "mutex.h"
 
@@ -81,7 +81,8 @@ kernel_pid_t gnrc_rpl_init(kernel_pid_t if_pid)
     }
 
     /* register all_RPL_nodes multicast address */
-    gnrc_ipv6_netif_add_addr(if_pid, &ipv6_addr_all_rpl_nodes, IPV6_ADDR_BIT_LEN, 0);
+    gnrc_netif_ipv6_group_join_internal(gnrc_netif_get_by_pid(if_pid),
+                                        &ipv6_addr_all_rpl_nodes);
 
     gnrc_rpl_send_DIS(NULL, (ipv6_addr_t *) &ipv6_addr_all_rpl_nodes);
     return gnrc_rpl_pid;
@@ -120,9 +121,9 @@ gnrc_rpl_instance_t *gnrc_rpl_root_init(uint8_t instance_id, ipv6_addr_t *dodag_
     dodag->dio_opts |= GNRC_RPL_REQ_DIO_OPT_PREFIX_INFO;
 #endif
 
-    trickle_start(gnrc_rpl_pid, &dodag->trickle, GNRC_RPL_MSG_TYPE_TRICKLE_INTERVAL,
-                  GNRC_RPL_MSG_TYPE_TRICKLE_CALLBACK, (1 << dodag->dio_min),
-                  dodag->dio_interval_doubl, dodag->dio_redun);
+    trickle_start(gnrc_rpl_pid, &dodag->trickle, GNRC_RPL_MSG_TYPE_TRICKLE_MSG,
+                  (1 << dodag->dio_min), dodag->dio_interval_doubl,
+                  dodag->dio_redun);
 
     return inst;
 }
@@ -216,15 +217,8 @@ static void *_event_loop(void *args)
                 DEBUG("RPL: GNRC_RPL_MSG_TYPE_LIFETIME_UPDATE received\n");
                 _update_lifetime();
                 break;
-            case GNRC_RPL_MSG_TYPE_TRICKLE_INTERVAL:
-                DEBUG("RPL: GNRC_RPL_MSG_TYPE_TRICKLE_INTERVAL received\n");
-                trickle = msg.content.ptr;
-                if (trickle && (trickle->callback.func != NULL)) {
-                    trickle_interval(trickle);
-                }
-                break;
-            case GNRC_RPL_MSG_TYPE_TRICKLE_CALLBACK:
-                DEBUG("RPL: GNRC_RPL_MSG_TYPE_TRICKLE_CALLBACK received\n");
+            case GNRC_RPL_MSG_TYPE_TRICKLE_MSG:
+                DEBUG("RPL: GNRC_RPL_MSG_TYPE_TRICKLE_MSG received\n");
                 trickle = msg.content.ptr;
                 if (trickle && (trickle->callback.func != NULL)) {
                     trickle_callback(trickle);
@@ -259,7 +253,7 @@ void _update_lifetime(void)
         parent = &gnrc_rpl_parents[i];
         if (parent->state != 0) {
             if (parent->lifetime > GNRC_RPL_LIFETIME_UPDATE_STEP) {
-                if (parent->lifetime > (2 * GNRC_RPL_LIFETIME_UPDATE_STEP)) {
+                if (parent->lifetime <= (2 * GNRC_RPL_LIFETIME_UPDATE_STEP)) {
                     gnrc_rpl_send_DIS(parent->dodag->instance, &parent->addr);
                 }
                 parent->lifetime -= GNRC_RPL_LIFETIME_UPDATE_STEP;

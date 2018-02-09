@@ -8,7 +8,7 @@
  */
 
 /**
- * @ingroup     driver_encx24j600
+ * @ingroup     drivers_encx24j600
  * @{
  *
  * @file
@@ -70,7 +70,7 @@ static int _init(netdev_t *dev);
 static void _isr(netdev_t *dev);
 static int _get(netdev_t *dev, netopt_t opt, void *value, size_t max_len);
 
-const static netdev_driver_t netdev_driver_encx24j600 = {
+static const netdev_driver_t netdev_driver_encx24j600 = {
     .send = _send,
     .recv = _recv,
     .init = _init,
@@ -255,7 +255,7 @@ static int _init(netdev_t *encdev)
             xtimer_usleep(ENCX24J600_INIT_DELAY);
         } while (reg_get(dev, ENC_EUDAST) != 0x1234);
 
-        while (!(reg_get(dev, ENC_ESTAT) & ENC_CLKRDY));
+        while (!(reg_get(dev, ENC_ESTAT) & ENC_CLKRDY)) {}
 
         /* issue System Reset */
         cmd(dev, ENC_SETETHRST);
@@ -296,12 +296,12 @@ static int _send(netdev_t *netdev, const struct iovec *vector, unsigned count) {
     lock(dev);
 
     /* wait until previous packet has been sent */
-    while ((reg_get(dev, ENC_ECON1) & ENC_TXRTS));
+    while ((reg_get(dev, ENC_ECON1) & ENC_TXRTS)) {}
 
     /* copy packet to SRAM */
     size_t len = 0;
 
-    for (int i = 0; i < count; i++) {
+    for (unsigned i = 0; i < count; i++) {
         sram_op(dev, ENC_WGPDATA, (i ? 0xFFFF : TX_BUFFER_START), vector[i].iov_base, vector[i].iov_len);
         len += vector[i].iov_len;
     }
@@ -315,7 +315,7 @@ static int _send(netdev_t *netdev, const struct iovec *vector, unsigned count) {
 
     /* wait for sending to complete */
     /* (not sure if it is needed, keeping the line uncommented) */
-    /*while ((reg_get(dev, ENC_ECON1) & ENC_TXRTS));*/
+    /*while ((reg_get(dev, ENC_ECON1) & ENC_TXRTS)) {}*/
 
 #ifdef MODULE_NETSTATS_L2
     netdev->stats.tx_bytes += len;

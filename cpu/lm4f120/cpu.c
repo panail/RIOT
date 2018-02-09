@@ -21,9 +21,9 @@
 #include "irq.h"
 #include "sched.h"
 #include "thread.h"
-#include "arch/thread_arch.h"
-#include "arch/irq_arch.h"
+#include "irq.h"
 #include "periph/init.h"
+#include "periph_conf.h"
 
 /**
  * @brief Initialize the CPU, set IRQ priorities

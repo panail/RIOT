@@ -24,8 +24,9 @@
 #define NET_GNRC_PRIORITY_PKTQUEUE_H
 
 #include <stdint.h>
-#include <priority_queue.h>
-#include <net/gnrc/pkt.h>
+
+#include "priority_queue.h"
+#include "net/gnrc/pkt.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -59,7 +60,7 @@ typedef priority_queue_t gnrc_priority_pktqueue_t;
  * @brief   Initialize a gnrc priority packet queue node object.
  *
  * @param[out] node
- *          pre-allocated gnrc_priority_pktqueue_node_t object, must not be NULL.
+ *          pre-allocated gnrc_priority_pktqueue_node_t object. Must not be NULL.
  * @param[in]  priority
  *          the priority of the gnrc packet snip
  * @param[in]  pkt
@@ -78,11 +79,12 @@ static inline void gnrc_priority_pktqueue_node_init(gnrc_priority_pktqueue_node_
  * @brief   Initialize a gnrc priority packet queue object.
  *
  * @param[out] queue
- *          pre-allocated gnrc_priority_pktqueue_t object, must not be NULL.
+ *          pre-allocated gnrc_priority_pktqueue_t object. Must not be NULL.
  */
 static inline void gnrc_priority_pktqueue_init(gnrc_priority_pktqueue_t *queue)
 {
     gnrc_priority_pktqueue_t qn = PRIORITY_PKTQUEUE_INIT;
+
     *queue = qn;
 }
 
@@ -90,7 +92,7 @@ static inline void gnrc_priority_pktqueue_init(gnrc_priority_pktqueue_t *queue)
  * @brief   Get the length information of a gnrc priority packet queue object.
  *
  * @param[in] queue
- *          pre-allocated gnrc_priority_pktqueue_t object, must not be NULL.
+ *          pre-allocated gnrc_priority_pktqueue_t object. Must not be NULL.
  * @return  the length of @p queue
  */
 uint32_t gnrc_priority_pktqueue_length(gnrc_priority_pktqueue_t *queue);
@@ -98,35 +100,35 @@ uint32_t gnrc_priority_pktqueue_length(gnrc_priority_pktqueue_t *queue);
 /**
  * @brief flush the gnrc priority packet queue
  *
- * @param[out]  queue    the gnrc priority packet queue, must not be NULL
+ * @param[out]  queue    the gnrc priority packet queue. Must not be NULL
  */
-void gnrc_priority_pktqueue_flush(gnrc_priority_pktqueue_t* queue);
+void gnrc_priority_pktqueue_flush(gnrc_priority_pktqueue_t *queue);
 
 /**
  * @brief Get first element and remove it from @p queue
  *
- * @param[out]  queue   the gnrc priority packet queue, may not be NULL
+ * @param[out]  queue   the gnrc priority packet queue. Must not be NULL
  *
  * @return              the old head
  */
-gnrc_pktsnip_t* gnrc_priority_pktqueue_pop(gnrc_priority_pktqueue_t* queue);
+gnrc_pktsnip_t *gnrc_priority_pktqueue_pop(gnrc_priority_pktqueue_t *queue);
 
 /**
  * @brief Get first element from @p queue without removing
  *
- * @param[in]  queue    the gnrc priority packet queue, may not be NULL
+ * @param[in]  queue    the gnrc priority packet queue. Must not be NULL
  *
  * @return              the head of @p queue
  */
-gnrc_pktsnip_t* gnrc_priority_pktqueue_head(gnrc_priority_pktqueue_t* queue);
+gnrc_pktsnip_t *gnrc_priority_pktqueue_head(gnrc_priority_pktqueue_t *queue);
 
 /**
  * @brief       add @p node into @p queue based on its priority
  *
- * @param[in,out]   queue   the gnrc priority packet queue, must not be NULL
+ * @param[in,out]   queue   the gnrc priority packet queue. Must not be NULL
  * @param[in]       node    the node to add.
  */
-void gnrc_priority_pktqueue_push(gnrc_priority_pktqueue_t* queue,
+void gnrc_priority_pktqueue_push(gnrc_priority_pktqueue_t *queue,
                                  gnrc_priority_pktqueue_node_t *node);
 
 #ifdef __cplusplus

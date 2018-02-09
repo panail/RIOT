@@ -7,7 +7,7 @@
  */
 
 /**
- * @ingroup     driver_enc28j60
+ * @ingroup     drivers_enc28j60
  * @{
  *
  * @file
@@ -43,7 +43,7 @@
  * @brief   If the clock is not stable after these amount of tries we abort the
  *          initialization
  */
-#define STARTUP_TIMEOUT             (1000U)
+#define STARTUP_TIMEOUT             (1000)
 
 /**
  * @brief   Set SPI speed fixed to 10MHz
@@ -177,7 +177,7 @@ static uint16_t cmd_r_phy(enc28j60_t *dev, uint8_t reg)
     /* trigger register read and wait for results */
     cmd_wcr(dev, REG_B2_MICMD, 2, MICMD_MIIRD);
     cmd_wcr(dev, REG_B2_MICMD, 2, 0x00);
-    while (cmd_rcr_miimac(dev, REG_B3_MISTAT, 3) & MISTAT_BUSY);
+    while (cmd_rcr_miimac(dev, REG_B3_MISTAT, 3) & MISTAT_BUSY) {}
     /* results */
     uint8_t low = cmd_rcr_miimac(dev, REG_B2_MIRDL, 2);
     uint8_t high = cmd_rcr_miimac(dev, REG_B2_MIRDH, 2);
@@ -191,7 +191,7 @@ static void cmd_w_phy(enc28j60_t *dev, uint8_t reg, uint16_t val)
     cmd_wcr(dev, REG_B2_MIWRL, 2, (val & 0xff));
     cmd_wcr(dev, REG_B2_MIWRH, 2, (val >> 8));
     /* wait until the transaction is finished */
-    while (cmd_rcr_miimac(dev, REG_B3_MISTAT, 3) & MISTAT_BUSY);
+    while (cmd_rcr_miimac(dev, REG_B3_MISTAT, 3) & MISTAT_BUSY) {}
 }
 
 static void cmd_rbm(enc28j60_t *dev, uint8_t *data, size_t len)
@@ -256,7 +256,7 @@ static int nd_send(netdev_t *netdev, const struct iovec *data, unsigned count)
     cmd_w_addr(dev, ADDR_WRITE_PTR, BUF_TX_START);
     /* write control byte and the actual data into the buffer */
     cmd_wbm(dev, &ctrl, 1);
-    for (int i = 0; i < count; i++) {
+    for (unsigned i = 0; i < count; i++) {
         c += data[i].iov_len;
         cmd_wbm(dev, (uint8_t *)data[i].iov_base, data[i].iov_len);
     }
@@ -320,7 +320,8 @@ static int nd_init(netdev_t *netdev)
     /* setup the low-level interfaces */
     gpio_init(dev->reset_pin, GPIO_OUT);
     gpio_clear(dev->reset_pin);     /* this puts the device into reset state */
-    if (spi_init_cs(dev->spi, dev->cs_pin) != SPI_OK) {
+    res = spi_init_cs(dev->spi, dev->cs_pin);
+    if (res != SPI_OK) {
         DEBUG("[enc28j60] init: error initializing the CS pin [%i]\n", res);
         return -1;
     }
@@ -458,7 +459,7 @@ static int nd_get(netdev_t *netdev, netopt_t opt, void *value, size_t max_len)
     }
 }
 
-static int nd_set(netdev_t *netdev, netopt_t opt, void *value, size_t value_len)
+static int nd_set(netdev_t *netdev, netopt_t opt, const void *value, size_t value_len)
 {
     enc28j60_t *dev = (enc28j60_t *)netdev;
 
@@ -472,7 +473,7 @@ static int nd_set(netdev_t *netdev, netopt_t opt, void *value, size_t value_len)
     }
 }
 
-const static netdev_driver_t netdev_driver_enc28j60 = {
+static const netdev_driver_t netdev_driver_enc28j60 = {
     .send = nd_send,
     .recv = nd_recv,
     .init = nd_init,

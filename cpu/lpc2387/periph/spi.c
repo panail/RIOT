@@ -9,6 +9,7 @@
 
 /**
  * @ingroup     cpu_lpc2387
+ * @ingroup     drivers_periph_spi
  * @{
  *
  * @file
@@ -56,6 +57,8 @@ void spi_init(spi_t bus)
 
 void spi_init_pins(spi_t bus)
 {
+    (void) bus;
+
     PINSEL3 |= (BIT8 | BIT9);     /* SCLK */
     PINSEL3 |= (BIT14 | BIT15);   /* MISO */
     PINSEL3 |= (BIT16 | BIT17);   /* MOSI */
@@ -63,6 +66,9 @@ void spi_init_pins(spi_t bus)
 
 int spi_acquire(spi_t bus, spi_cs_t cs, spi_mode_t mode, spi_clk_t clk)
 {
+    (void) bus;
+    (void) cs;
+
     uint32_t pclksel;
     uint32_t cpsr;
 
@@ -97,6 +103,7 @@ int spi_acquire(spi_t bus, spi_cs_t cs, spi_mode_t mode, spi_clk_t clk)
 
 void spi_release(spi_t bus)
 {
+    (void) bus;
     /* disable, power off, and release the bus */
     SSP0CR1 &= ~(BIT1);
     PCONP &= ~(PCSSP0);
@@ -106,8 +113,10 @@ void spi_release(spi_t bus)
 void spi_transfer_bytes(spi_t bus, spi_cs_t cs, bool cont,
                         const void *out, void *in, size_t len)
 {
-    uint8_t *out_buf = (uint8_t *)out;
-    uint8_t *in_buf = (uint8_t *)in;
+    (void) bus;
+
+    const uint8_t *out_buf = out;
+    uint8_t *in_buf = in;
 
     assert(out_buf || in_buf);
 

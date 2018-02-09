@@ -8,6 +8,7 @@
 
 /**
  * @ingroup     cpu_stm32f4
+ * @ingroup     drivers_periph_adc
  * @{
  *
  * @file
@@ -22,8 +23,6 @@
 #include "mutex.h"
 #include "periph/adc.h"
 #include "periph_conf.h"
-
-#ifdef ADC_CONFIG
 
 /**
  * @brief   Maximum allowed ADC clock speed
@@ -121,7 +120,3 @@ int adc_sample(adc_t line, adc_res_t res)
 
     return sample;
 }
-
-#else
-typedef int dont_be_pedantic;
-#endif /* ADC_CONFIG */

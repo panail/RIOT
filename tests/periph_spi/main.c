@@ -110,7 +110,7 @@ int cmd_init(int argc, char **argv)
 
     /* parse the given SPI device */
     dev = atoi(argv[1]);
-    if (dev < 0 || dev >= SPI_NUMOF) {
+    if (dev < 0 || dev >= (int)SPI_NUMOF) {
         puts("error: invalid SPI device specified");
         return 1;
     }
@@ -219,6 +219,9 @@ int cmd_transfer(int argc, char **argv)
 
 int cmd_bench(int argc, char **argv)
 {
+    (void)argc;
+    (void)argv;
+
     uint32_t start, stop;
     uint32_t sum = 0;
     uint8_t in;

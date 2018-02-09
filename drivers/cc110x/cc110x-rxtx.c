@@ -152,8 +152,7 @@ static void _rx_continue(cc110x_t *dev, void(*callback)(void*), void*arg)
 
     do {
         _rx_read_data(dev, callback, arg);
-    }
-    while (gpio_read(dev->params.gdo2));
+    } while (gpio_read(dev->params.gdo2));
 }
 
 static void _tx_abort(cc110x_t *dev)
@@ -248,7 +247,7 @@ int cc110x_send(cc110x_t *dev, cc110x_pkt_t *packet)
 {
     DEBUG("cc110x: snd pkt to %u payload_length=%u\n",
             (unsigned)packet->address, (unsigned)packet->length-3);
-    uint8_t size;
+    unsigned size;
 
     switch (dev->radio_state) {
         case RADIO_RX_BUSY:
@@ -294,5 +293,5 @@ int cc110x_send(cc110x_t *dev, cc110x_pkt_t *packet)
 
     _tx_continue(dev);
 
-    return size;
+    return (int)size;
 }

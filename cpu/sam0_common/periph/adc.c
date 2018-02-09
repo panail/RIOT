@@ -8,6 +8,16 @@
  * directory for more details.
  */
 
+/**
+ * @ingroup     cpu_sam0_common
+ * @ingroup     drivers_periph_adc
+ * @{
+ *
+ * @file
+ * @brief       Low-level ADC driver implementation
+ *
+ * @}
+ */
 #include <stdint.h>
 #include "cpu.h"
 #include "periph/gpio.h"
@@ -17,9 +27,6 @@
 
 #define ENABLE_DEBUG (0)
 #include "debug.h"
-
-/* Only if we actually have any ADCs */
-#if ADC_NUMOF
 
 /* ADC 0 device configuration */
 #define ADC_0_DEV                          ADC
@@ -76,7 +83,11 @@ static void _adc_poweroff(void)
 
 static int _adc_configure(adc_res_t res)
 {
-    assert(res >= ADC_RES_8BIT && res <= ADC_RES_12BIT);
+    /* Individual comparison necessary because ADC Resolution Bits are not
+     * numerically in order and 16Bit (averaging - not currently supported)
+     * falls between 12bit and 10bit.  See datasheet for details */
+    assert((res == ADC_RES_8BIT) || (res == ADC_RES_10BIT) ||
+           (res == ADC_RES_12BIT));
     _adc_poweroff();
     if (ADC_0_DEV->CTRLA.reg & ADC_CTRLA_SWRST ||
         ADC_0_DEV->CTRLA.reg & ADC_CTRLA_ENABLE ) {
@@ -176,5 +187,3 @@ int adc_sample(adc_t line, adc_res_t res)
     _done();
     return result;
 }
-
-#endif /* #if ADC_NUMOF */

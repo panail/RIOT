@@ -8,10 +8,14 @@
 
 /**
  * @ingroup     cpu_samd21
+ * @ingroup     drivers_periph_rtc
  * @{
+ *
  * @file
  * @brief       Low-level RTC driver implementation
- * @author      Baptiste Clenet <baptiste.clenet@xsoen.com>
+ *
+ * @author      Baptiste Clenet <bapclenet@gmail.com>
+ *
  * @}
  */
 
@@ -19,9 +23,6 @@
 #include "cpu.h"
 #include "periph/rtc.h"
 #include "periph_conf.h"
-
-/* guard file in case no RTC device was specified */
-#if RTC_NUMOF
 
 typedef struct {
     rtc_alarm_cb_t cb;        /**< callback called from RTC interrupt */
@@ -195,5 +196,3 @@ void isr_rtc(void)
     }
     cortexm_isr_end();
 }
-
-#endif /* RTC_NUMOF */

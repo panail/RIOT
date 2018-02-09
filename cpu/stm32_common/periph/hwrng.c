@@ -9,6 +9,7 @@
 
 /**
  * @ingroup     cpu_stm32_common
+ * @ingroup     drivers_periph_hwrng
  * @{
  *
  * @file

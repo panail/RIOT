@@ -10,6 +10,7 @@
 
 /**
  * @ingroup     cpu_stm32_common
+ * @ingroup     drivers_periph_spi
  * @{
  *
  * @file
@@ -29,9 +30,6 @@
 #include "mutex.h"
 #include "assert.h"
 #include "periph/spi.h"
-
-/* Remove this ugly guard once we selectively build the periph drivers */
-#ifdef SPI_NUMOF
 
 /**
  * @brief   Number of bits to shift the BR value in the CR1 register
@@ -119,8 +117,6 @@ int spi_init_cs(spi_t bus, spi_cs_t cs)
 
 int spi_acquire(spi_t bus, spi_cs_t cs, spi_mode_t mode, spi_clk_t clk)
 {
-    assert((clk >= SPI_CLK_100KHZ) && (clk <= SPI_CLK_10MHZ));
-
     /* lock bus */
     mutex_lock(&locks[bus]);
     /* enable SPI device clock */
@@ -150,8 +146,8 @@ void spi_release(spi_t bus)
 void spi_transfer_bytes(spi_t bus, spi_cs_t cs, bool cont,
                         const void *out, void *in, size_t len)
 {
-    uint8_t *inbuf = (uint8_t *)in;
-    uint8_t *outbuf = (uint8_t *)out;
+    const uint8_t *outbuf = out;
+    uint8_t *inbuf = in;
 
     /* make sure at least one input or one output buffer is given */
     assert(outbuf || inbuf);
@@ -208,5 +204,3 @@ void spi_transfer_bytes(spi_t bus, spi_cs_t cs, bool cont,
         }
     }
 }
-
-#endif /* SPI_NUMOF */

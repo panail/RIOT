@@ -27,6 +27,11 @@ extern "C" {
 #endif
 
 /**
+ * @brief   Starting address of the CPU ID
+ */
+#define CPUID_ADDR          (0x1fff7590)
+
+/**
  * @brief   Available ports
  */
 enum {
@@ -64,14 +69,6 @@ typedef struct {
     gpio_t pin;             /**< pin to use */
     uint8_t chan;           /**< internal channel the pin is connected to */
 } adc_conf_t;
-
-/**
- * @brief   DAC line configuration data
- */
-typedef struct {
-    gpio_t pin;             /**< pin connected to the line */
-    uint8_t chan;           /**< DAC device used for this line */
-} dac_conf_t;
 
 #ifdef __cplusplus
 }
