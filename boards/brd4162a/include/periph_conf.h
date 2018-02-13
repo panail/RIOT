@@ -7,12 +7,13 @@
  */
 
 /**
- * @ingroup     boards_sltb001a
+ * @ingroup     boards_brd4162a
  * @{
  *
  * @file
- * @brief       Configuration of CPU peripherals for the SLTB001A starter kit
+ * @brief       Configuration of CPU peripherals for the BRD4162A starter kit
  *
+ * @author      Kai Beckmann <kai.beckmann@hs-rm.de>
  * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
  * @author      Bas Stottelaar <basstottelaar@gmail.com>
  */
@@ -53,14 +54,87 @@ extern "C" {
 #define CLOCK_CORE_DIV      cmuClkDiv_1
 #endif
 #ifndef CLOCK_LFA
-#define CLOCK_LFA           cmuSelect_LFXO
+#define CLOCK_LFA           cmuSelect_LFRCO
 #endif
 #ifndef CLOCK_LFB
-#define CLOCK_LFB           cmuSelect_LFXO
+#define CLOCK_LFB           cmuSelect_LFRCO
 #endif
 #ifndef CLOCK_LFE
-#define CLOCK_LFE           cmuSelect_LFXO
+#define CLOCK_LFE           cmuSelect_LFRCO
 #endif
+/** @} */
+
+/**
+ * @name    EMU configuration
+ * @{
+ */
+#ifndef EMU_DCDCINIT
+#define EMU_DCDCINIT         EMU_DCDCINIT_DEFAULT
+#endif
+#ifndef EMU_EM23INIT
+#define EMU_EM23INIT         EMU_EM23INIT_DEFAULT
+#endif
+#ifndef EMU_EM4INIT
+#define EMU_EM4INIT         EMU_EM4INIT_DEFAULT
+#endif
+/** @} */
+
+#if 0
+#define CLOCK_HFXO_INIT                                                  \
+  {                                                                        \
+    false,      /* Low-noise mode for EFR32 */                             \
+    false,      /* Disable auto-start on EM0/1 entry */                    \
+    false,      /* Disable auto-select on EM0/1 entry */                   \
+    false,      /* Disable auto-start and select on RAC wakeup */          \
+    _CMU_HFXOSTARTUPCTRL_CTUNE_DEFAULT,                                    \
+    0x142,      /* Steady-state CTUNE for WSTK boards without load caps */ \
+    _CMU_HFXOSTEADYSTATECTRL_REGISH_DEFAULT,                               \
+    0x20,       /* Matching errata fix in CHIP_Init() */                   \
+    0x7,        /* Recommended steady-state osc core bias current */       \
+    0x6,        /* Recommended peak detection threshold */                 \
+    _CMU_HFXOTIMEOUTCTRL_SHUNTOPTTIMEOUT_DEFAULT,                          \
+    0xA,        /* Recommended peak detection timeout  */                  \
+    0x4,        /* Recommended steady timeout */                           \
+    _CMU_HFXOTIMEOUTCTRL_STARTUPTIMEOUT_DEFAULT,                           \
+    cmuOscMode_Crystal,                                                    \
+  }
+
+#if !defined(CMU_HFXOINIT_WSTK_DEFAULT)
+#define CMU_HFXOINIT_WSTK_DEFAULT                                          \
+  {                                                                        \
+    false,      /* Low-noise mode for EFR32 */                             \
+    false,      /* Disable auto-start on EM0/1 entry */                    \
+    false,      /* Disable auto-select on EM0/1 entry */                   \
+    false,      /* Disable auto-start and select on RAC wakeup */          \
+    _CMU_HFXOSTARTUPCTRL_CTUNE_DEFAULT,                                    \
+    0x142,      /* Steady-state CTUNE for WSTK boards without load caps */ \
+    _CMU_HFXOSTEADYSTATECTRL_REGISH_DEFAULT,                               \
+    _CMU_HFXOSTARTUPCTRL_IBTRIMXOCORE_DEFAULT,                             \
+    0x7,        /* Recommended steady-state osc core bias current */       \
+    0x6,        /* Recommended peak detection threshold */                 \
+    _CMU_HFXOTIMEOUTCTRL_SHUNTOPTTIMEOUT_DEFAULT,                          \
+    0xA,        /* Recommended peak detection timeout  */                  \
+    0x4,        /* Recommended steady timeout */                           \
+    _CMU_HFXOTIMEOUTCTRL_STARTUPTIMEOUT_DEFAULT,                           \
+    cmuOscMode_Crystal,                                                    \
+  }
+#endif
+
+#endif
+
+#if 0
+#if !defined(EMU_DCDCINIT_WSTK_DEFAULT)
+/* Use emlib defaults */
+#define EMU_DCDCINIT_WSTK_DEFAULT EMU_DCDCINIT_DEFAULT
+#endif
+#endif
+
+#define CLOCK_HFXO_FREQ 38400000UL
+#define CLOCK_LFXO_FREQ 32768UL
+
+
+
+
 /** @} */
 
 /**
@@ -121,12 +195,10 @@ static const i2c_conf_t i2c_config[] = {
                I2C_ROUTELOC0_SCLLOC_LOC15,
         .cmu = cmuClock_I2C0,
         .irq = I2C0_IRQn
-
     }
 };
 
 #define I2C_NUMOF           PERIPH_NUMOF(i2c_config)
-#define I2C_0_ISR           isr_i2c0
 /** @} */
 
 /**
@@ -204,13 +276,22 @@ static const uart_conf_t uart_config[] = {
         .irq = USART0_RX_IRQn
     },
     {
-        .dev = USART1,
-        .rx_pin = GPIO_PIN(PC, 6),
-        .tx_pin = GPIO_PIN(PC, 7),
-        .loc = USART_ROUTELOC0_RXLOC_LOC11 |
-               USART_ROUTELOC0_TXLOC_LOC11,
-        .cmu = cmuClock_USART1,
-        .irq = USART1_RX_IRQn
+        .dev = USART2,
+        .rx_pin = GPIO_PIN(PA, 7),
+        .tx_pin = GPIO_PIN(PA, 6),
+        .loc = USART_ROUTELOC0_RXLOC_LOC1 |
+               USART_ROUTELOC0_TXLOC_LOC1,
+        .cmu = cmuClock_USART2,
+        .irq = USART2_RX_IRQn
+    },
+    {
+        .dev = USART3,
+        .rx_pin = GPIO_PIN(PB, 7),
+        .tx_pin = GPIO_PIN(PB, 6),
+        .loc = USART_ROUTELOC0_RXLOC_LOC10 |
+               USART_ROUTELOC0_TXLOC_LOC10,
+        .cmu = cmuClock_USART3,
+        .irq = USART3_RX_IRQn
     },
     {
         .dev = LEUART0,
@@ -225,8 +306,9 @@ static const uart_conf_t uart_config[] = {
 
 #define UART_NUMOF          PERIPH_NUMOF(uart_config)
 #define UART_0_ISR_RX       isr_usart0_rx
-#define UART_1_ISR_RX       isr_usart1_rx
-#define UART_2_ISR_RX       isr_leuart0
+#define UART_1_ISR_RX       isr_usart2_rx
+#define UART_2_ISR_RX       isr_usart3_rx
+#define UART_3_ISR_RX       isr_leuart0
 /** @} */
 
 #ifdef __cplusplus

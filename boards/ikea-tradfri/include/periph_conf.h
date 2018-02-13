@@ -38,6 +38,13 @@ extern "C" {
  * @name    Clock configuration
  * @{
  */
+#ifndef CMU_HFXOINIT
+#define CMU_HFXOINIT        CMU_HFXOINIT_DEFAULT
+#endif
+#ifndef CMU_LFXOINIT
+#define CMU_LFXOINIT        CMU_LFXOINIT_DEFAULT
+#endif
+
 #ifndef CLOCK_HF
 #define CLOCK_HF            cmuSelect_HFRCO
 #endif
@@ -52,6 +59,21 @@ extern "C" {
 #endif
 #ifndef CLOCK_LFE
 #define CLOCK_LFE           cmuSelect_LFRCO
+#endif
+/** @} */
+
+/**
+ * @name    EMU configuration
+ * @{
+ */
+#ifndef EMU_DCDCINIT
+#define EMU_DCDCINIT         EMU_DCDCINIT_DEFAULT
+#endif
+#ifndef EMU_EM23INIT
+#define EMU_EM23INIT         EMU_EM23INIT_DEFAULT
+#endif
+#ifndef EMU_EM4INIT
+#define EMU_EM4INIT         EMU_EM4INIT_DEFAULT
 #endif
 /** @} */
 
