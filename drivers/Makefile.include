@@ -167,3 +167,6 @@ endif
 ifneq (,$(filter lis2dh12,$(USEMODULE)))
   USEMODULE_INCLUDES += $(RIOTBASE)/drivers/lis2dh12/include
 endif
+ifneq (,$(filter efm32_internal_temp_sensor,$(USEMODULE)))
+  USEMODULE_INCLUDES += $(RIOTBASE)/drivers/efm32_internal_temp_sensor/include
+endif
