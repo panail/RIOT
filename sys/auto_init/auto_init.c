@@ -372,6 +372,10 @@ auto_init_mpu9150();
     extern void auto_init_lis2dh12(void);
     auto_init_lis2dh12();
 #endif
+#ifdef MODULE_EFM32_VDD_MEASUREMENT
+    extern void auto_init_efm32_vdd_measurement(void);
+    auto_init_efm32_vdd_measurement();
+#endif
 
 #endif /* MODULE_AUTO_INIT_SAUL */
 
