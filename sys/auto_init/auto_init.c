@@ -372,6 +372,10 @@ auto_init_mpu9150();
     extern void auto_init_lis2dh12(void);
     auto_init_lis2dh12();
 #endif
+#ifdef MODULE_BATTERY_MONITOR
+    extern void auto_init_battery_monitor(void);
+    auto_init_battery_monitor();
+#endif
 
 #endif /* MODULE_AUTO_INIT_SAUL */
 
