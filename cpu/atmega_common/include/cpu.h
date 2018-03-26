@@ -92,6 +92,11 @@ __attribute__((always_inline)) static inline void cpu_print_last_instruction(voi
     printf("Stack Pointer: 0x%04x\n", ptr);
 }
 
+/**
+ * @brief   Initializes avrlibc stdio
+ */
+void atmega_stdio_init(void);
+
 #ifdef __cplusplus
 }
 #endif
