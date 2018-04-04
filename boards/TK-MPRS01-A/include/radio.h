@@ -7,14 +7,14 @@
  */
 
 /**
- * @defgroup    boards_brd4162a Silicon Labs BRD4162A starter kit
+ * @defgroup    boards_TK-MPRS01-A 
  * @ingroup     boards
- * @brief       Support for the Silicon Labs BRD4162A starter kit
+ * @brief       
  * @{
  *
  * @file
  * @brief       Board specific definitions for the radio transceicer of the 
- * BRD4162A starter kit
+ * TK-MPRS01-A
  *
  * @author      Kai Beckmann <kai.beckmann@hs-rm.de>
  **/
@@ -35,7 +35,7 @@ extern "C" {
 #endif
 
 // posible values, 2400, 868, 915
-#define RAIL_RADIO_BAND 868
+#define RAIL_RADIO_BAND 2400
 
 
 // Packet Trace interface

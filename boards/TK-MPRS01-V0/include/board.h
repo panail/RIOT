@@ -7,13 +7,13 @@
  */
 
 /**
- * @defgroup    boards_tk-mprs01a Thermokon window contact
+ * @defgroup    boards_TK-MPRS01-V0 Thermokon window contact
  * @ingroup     boards
- * @brief       Support for the Thermokon MPRS01 model a
+ * @brief       Support for the Thermokon MPRS01-V0 pre version
  * @{
  *
  * @file
- * @brief       Board specific definitions for the Thermokon MPRS01 model a
+ * @brief       Board specific definitions for the Thermokon MPRS01-V0 model a
  *
  *
  * @author      Kai Beckmann <kai.beckmann@hs-rm.de>
@@ -45,15 +45,25 @@ extern "C" {
  * @{
  */
 #define XTIMER_HZ           (250000UL)
-#define XTIMER_SHIFT        (2)
 #define XTIMER_WIDTH        (16)
+/** @} */
+
+/**
+ * @name    Enable Advanced Energy Monitor
+ *
+ * When enabled, additional CPU statistics are available via SWO.
+ * @{
+ */
+#ifndef AEM_ENABLED
+#define AEM_ENABLED         (1)
+#endif
 /** @} */
 
 /**
  * @brief   Push button pin definitions.
  * @{
  */
-#define PB0_PIN             GPIO_PIN(PD, 14)
+#define BTN0_PIN            GPIO_PIN(PD, 14)
 /** @} */
 
 /**

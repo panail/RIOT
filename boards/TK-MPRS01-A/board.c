@@ -7,12 +7,12 @@
  */
 
 /**
- * @ingroup     boards_tk-mprs01v3
+ * @ingroup     boards_TK-MPRS01-A
  * @{
  *
  * @file
  * @brief       Board specific implementations for Thermokon
- * board  mprs01 v3.1 model a
+ * board  TK-MPRS01-A
  *
  * @author      Kai Beckmann <kai.beckmann@hs-rm.de> 
  *
