@@ -7,13 +7,13 @@
  */
 
 /**
- * @defgroup    boards_tk-mprs01a Thermokon window contact
+ * @defgroup    boards_TK-MPRS01-A Thermokon window contact
  * @ingroup     boards
- * @brief       Support for the Thermokon MPRS01 model a
+ * @brief       Support for the Thermokon TK-MPRS01-A
  * @{
  *
  * @file
- * @brief       Board specific definitions for the Thermokon MPRS01 model a
+ * @brief       Board specific definitions for the Thermokon TK-MPRS01-A
  *
  *
  * @author      Kai Beckmann <kai.beckmann@hs-rm.de>
@@ -45,22 +45,32 @@ extern "C" {
  * @{
  */
 #define XTIMER_HZ           (250000UL)
-#define XTIMER_SHIFT        (2)
 #define XTIMER_WIDTH        (16)
+/** @} */
+
+/**
+ * @name    Enable Advanced Energy Monitor
+ *
+ * When enabled, additional CPU statistics are available via SWO.
+ * @{
+ */
+#ifndef AEM_ENABLED
+#define AEM_ENABLED         (1)
+#endif
 /** @} */
 
 /**
  * @brief   Push button pin definitions.
  * @{
  */
-#define PB0_PIN             GPIO_PIN(PD, 14)
+#define BTN0_PIN            GPIO_PIN(PF, 7)
 /** @} */
 
 /**
  * @brief    LED pin definitions.
  * @{
  */
-#define LED0_PIN            GPIO_PIN(PC, 10)
+#define LED0_PIN            GPIO_PIN(PF, 6)
 /** @} */
 
 /**
@@ -76,14 +86,14 @@ extern "C" {
  * @brief   Reed contact
  * @{
  */
-#define REED_CONTACT_PIN    GPIO_PIN(PF, 7)
+#define REED_CONTACT_PIN    GPIO_PIN(PC, 11)
 /** @} */
 
  /**
  * @brief   GPIO to suply peripherals with vcc
  * @{
  */
-#define PERIPH_VCC_PIN    GPIO_PIN(PC, 11)
+#define PERIPH_VCC_PIN    GPIO_PIN(PF, 5)
 /** @} */
 
  /**

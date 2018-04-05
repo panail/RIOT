@@ -7,12 +7,12 @@
  */
 
 /**
- * @ingroup     boards_tk-mprs01a
+ * @ingroup     boards_TK-MPRS01-V0
  * @{
  *
  * @file
  * @brief       Board specific implementations for Thermokon
- * board  mprs01 model a
+ * board  TK-MPRS01-V0
  *
  * @author      Kai Beckmann <kai.beckmann@hs-rm.de> 
  *
@@ -43,7 +43,7 @@ void board_init(void)
     gpio_init(LED0_PIN, GPIO_OUT);
 
     /* init the button */
-    gpio_init(PB0_PIN, GPIO_IN);
+    gpio_init(BTN0_PIN, GPIO_IN);
 
     /* init reed contact gpio */
     gpio_init(REED_CONTACT_PIN, GPIO_IN);
@@ -60,7 +60,7 @@ void board_init(void)
     ret = adc_init(BATT_MEASS_LINE);
   //  assert(ret > 0);
 
-    /* init intrnal VDD measure adc */
+    /* init internal VDD measure adc */
     ret = adc_init(VDD_MEASS_LINE);
   //  assert(ret > 0);
 
