@@ -7,13 +7,13 @@
  */
 
 /**
- * @defgroup    boards_tk-mprs01 v3.1 Thermokon window contact
+ * @defgroup    boards_TK-MPRS01-A Thermokon window contact
  * @ingroup     boards
- * @brief       Support for the Thermokon MPRS01 v3.1 model a
+ * @brief       Support for the Thermokon TK-MPRS01-A
  * @{
  *
  * @file
- * @brief       Board specific definitions for the Thermokon MPRS01 v3.1 model a
+ * @brief       Board specific definitions for the Thermokon TK-MPRS01-A
  *
  *
  * @author      Kai Beckmann <kai.beckmann@hs-rm.de>

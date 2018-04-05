@@ -11,7 +11,7 @@
  * @{
  *
  * @file
- * @brief       Configuration of CPU peripherals for Thermokon mprs01 model a
+ * @brief       Configuration of CPU peripherals for Thermokon MPRS01-A
  *
  * @author      Kai Beckmann <kai.beckmann@hs-rm.de>
  * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
