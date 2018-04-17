@@ -347,3 +347,13 @@ endif
 ifneq (,$(filter battery_monitor,$(USEMODULE)))
   FEATURES_REQUIRED += periph_adc
 endif
+
+ifneq (,$(filter m24512,$(USEMODULE)))
+  FEATURES_REQUIRED += periph_i2c
+  USEMODULE += nvram
+endif
+
+ifneq (,$(filter ms5607,$(USEMODULE)))
+  FEATURES_REQUIRED += periph_i2c
+  USEMODULE += xtimer
+endif
