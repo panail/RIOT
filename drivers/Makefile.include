@@ -170,3 +170,6 @@ endif
 ifneq (,$(filter m24512,$(USEMODULE)))
   USEMODULE_INCLUDES += $(RIOTBASE)/drivers/m24512/include
 endif
+ifneq (,$(filter ms5607,$(USEMODULE)))
+  USEMODULE_INCLUDES += $(RIOTBASE)/drivers/ms5607/include
+endif
