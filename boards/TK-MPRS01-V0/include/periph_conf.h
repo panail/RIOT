@@ -7,11 +7,11 @@
  */
 
 /**
- * @ingroup     boards_tk-mprs01a
+ * @ingroup     boards_TK-MPRS01-V0
  * @{
  *
  * @file
- * @brief       Configuration of CPU peripherals for Thermokon mprs01 model a
+ * @brief       Configuration of CPU peripherals for Thermokon TK-MPRS01 V0
  *
  * @author      Kai Beckmann <kai.beckmann@hs-rm.de>
  * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
@@ -48,6 +48,7 @@ extern "C" {
 #ifndef CLOCK_CORE_DIV
 #define CLOCK_CORE_DIV      cmuClkDiv_1
 #endif
+    // TODO or LFRCO?
 #ifndef CLOCK_LFA
 #define CLOCK_LFA           cmuSelect_LFRCO
 #endif
@@ -116,17 +117,16 @@ static const adc_chan_conf_t adc_channel_config[] = {
 static const i2c_conf_t i2c_config[] = {
     {
         .dev = I2C0,
-        .sda_pin = GPIO_PIN(PF, 4),
-        .scl_pin = GPIO_PIN(PF, 3),
-        .loc = I2C_ROUTELOC0_SDALOC_LOC28 |
-               I2C_ROUTELOC0_SCLLOC_LOC26,
+        .sda_pin = GPIO_PIN(PF, 6),
+        .scl_pin = GPIO_PIN(PF, 5),
+        .loc = I2C_ROUTELOC0_SDALOC_LOC30 |
+               I2C_ROUTELOC0_SCLLOC_LOC30,
         .cmu = cmuClock_I2C0,
         .irq = I2C0_IRQn
     }
 };
 
 #define I2C_NUMOF           PERIPH_NUMOF(i2c_config)
-#define I2C_0_ISR           isr_i2c0
 
 /** @} */
 
@@ -219,15 +219,6 @@ static const uart_conf_t uart_config[] = {
         .cmu = cmuClock_USART0,
         .irq = USART0_RX_IRQn
     },
-    {
-        .dev = USART1,
-        .rx_pin = GPIO_PIN(PA, 1),
-        .tx_pin = GPIO_PIN(PA, 0),
-        .loc = USART_ROUTELOC0_RXLOC_LOC0 |
-               USART_ROUTELOC0_TXLOC_LOC0,
-        .cmu = cmuClock_USART1,
-        .irq = USART1_RX_IRQn
-    }
 //    ,
 //    {
 //        LEUART0,                            /* device */
@@ -242,7 +233,7 @@ static const uart_conf_t uart_config[] = {
 
 #define UART_NUMOF          PERIPH_NUMOF(uart_config)
 #define UART_0_ISR_RX       isr_usart0_rx
-#define UART_1_ISR_RX       isr_usart1_rx
+
 
 /** @} */
 

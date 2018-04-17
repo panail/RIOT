@@ -1,11 +1,12 @@
 ifneq (,$(filter saul_default,$(USEMODULE)))
     USEMODULE += saul_gpio
-    USEMODULE += si70xx
 endif
 ifneq (,$(filter netdev_default gnrc_netdev_default,$(USEMODULE)))
     USEMODULE += rail
 endif 
 
-USEPKG += gecko-sdk
+USEPKG += gecko_sdk
+
+USEMODULE += periph_adc
 
 #TODO sensor driver
