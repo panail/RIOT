@@ -376,6 +376,18 @@ auto_init_mpu9150();
     extern void auto_init_efm32_vdd_measurement(void);
     auto_init_efm32_vdd_measurement();
 #endif
+#ifdef MODULE_EFM32_INTERNAL_TEMP_SENSOR
+    extern void auto_init_efm32_internal_temp_sensor(void);
+    auto_init_efm32_internal_temp_sensor();
+#endif
+#ifdef MODULE_BATTERY_MONITOR
+    extern void auto_init_battery_monitor(void);
+    auto_init_battery_monitor();
+#endif
+#ifdef MODULE_MS5607
+    extern void auto_init_ms5607(void);
+    auto_init_ms5607();
+#endif
 
 #endif /* MODULE_AUTO_INIT_SAUL */
 
