@@ -344,6 +344,10 @@ ifneq (,$(filter tja1042,$(USEMODULE)))
   FEATURES_REQUIRED += periph_gpio
 endif
 
+ifneq (,$(filter efm32_internal_temp_sensor,$(USEMODULE)))
+  FEATURES_REQUIRED += periph_adc
+endif
+
 ifneq (,$(filter battery_monitor,$(USEMODULE)))
   FEATURES_REQUIRED += periph_adc
 endif

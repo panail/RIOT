@@ -372,6 +372,11 @@ auto_init_mpu9150();
     extern void auto_init_lis2dh12(void);
     auto_init_lis2dh12();
 #endif
+<<<<<<< sys/auto_init/auto_init.c
+#ifdef MODULE_EFM32_INTERNAL_TEMP_SENSOR
+    extern void auto_init_efm32_internal_temp_sensor(void);
+    auto_init_efm32_internal_temp_sensor();
+#endif
 #ifdef MODULE_BATTERY_MONITOR
     extern void auto_init_battery_monitor(void);
     auto_init_battery_monitor();
