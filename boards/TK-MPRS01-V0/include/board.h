@@ -30,10 +30,7 @@
 #include "periph/gpio.h"
 #include "periph/spi.h"
 
-#include "radio.h"
 
-// RAIL api
-#include "rail.h"
 
 #ifdef __cplusplus
 extern "C" {
