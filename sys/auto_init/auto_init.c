@@ -388,6 +388,10 @@ auto_init_mpu9150();
     extern void auto_init_ms5607(void);
     auto_init_ms5607();
 #endif
+#ifdef MODULE_SHT35
+    extern void auto_init_sht35(void);
+    auto_init_sht35();
+#endif
 
 #endif /* MODULE_AUTO_INIT_SAUL */
 
