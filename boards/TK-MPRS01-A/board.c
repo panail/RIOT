@@ -69,6 +69,11 @@ void board_init(void)
   //  assert(ret > 0);
     ret = ret;
 
+    /* power on periphery supply */
+    gpio_set(PERIPH_VCC_PIN);
+    volatile uint32_t count = (1000 * (SystemCoreClock / 1000 / 1000)) / 2;
+    while (count--) {}
+
 
     /* init i2c? */
 
