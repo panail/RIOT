@@ -57,12 +57,6 @@ extern "C" {
 #ifndef CLOCK_LFE
 #define CLOCK_LFE           cmuSelect_LFRCO
 #endif
-#ifndef CLOCK_HFXO_FREQ
-#define CLOCK_HFXO_FREQ 38400000UL
-#endif
-#ifndef CLOCK_LFXO_FREQ
-#define CLOCK_LFXO_FREQ 32768UL
-#endif
 /** @} */
 
 

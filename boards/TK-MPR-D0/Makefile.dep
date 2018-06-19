@@ -5,8 +5,9 @@ ifneq (,$(filter netdev_default gnrc_netdev_default,$(USEMODULE)))
     USEMODULE += rail
 endif 
 
-USEPKG += gecko_sdk
-
 USEMODULE += periph_adc
 
-#TODO sensor driver
+# include board common dependencies
+include $(RIOTBOARD)/common/silabs/Makefile.dep
+
+include $(RIOTCPU)/efm32/Makefile.dep
