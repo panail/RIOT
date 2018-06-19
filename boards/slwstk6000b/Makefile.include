@@ -20,6 +20,7 @@ include $(RIOTMAKE)/tools/jlink.inc.mk
 
 # add board common drivers
 USEMODULE += boards_common_silabs
+USEMODULE += silabs_trace
 USEMODULE += silabs_aem
 USEMODULE += silabs_bc
 
