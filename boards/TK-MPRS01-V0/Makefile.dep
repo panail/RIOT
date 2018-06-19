@@ -1,0 +1,13 @@
+ifneq (,$(filter saul_default,$(USEMODULE)))
+    USEMODULE += saul_gpio
+endif
+ifneq (,$(filter netdev_default gnrc_netdev_default,$(USEMODULE)))
+    USEMODULE += rail
+endif 
+
+USEMODULE += periph_adc
+
+# include board common dependencies
+include $(RIOTBOARD)/common/silabs/Makefile.dep
+
+include $(RIOTCPU)/efm32/Makefile.dep
