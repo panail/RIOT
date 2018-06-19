@@ -48,7 +48,6 @@ extern "C" {
 #ifndef CLOCK_CORE_DIV
 #define CLOCK_CORE_DIV      cmuClkDiv_1
 #endif
-    // TODO or LFRCO?
 #ifndef CLOCK_LFA
 #define CLOCK_LFA           cmuSelect_LFRCO
 #endif
@@ -57,12 +56,6 @@ extern "C" {
 #endif
 #ifndef CLOCK_LFE
 #define CLOCK_LFE           cmuSelect_LFRCO
-#endif
-#ifndef CLOCK_HFXO_FREQ
-#define CLOCK_HFXO_FREQ 38400000UL
-#endif
-#ifndef CLOCK_LFXO_FREQ
-#define CLOCK_LFXO_FREQ 32768UL
 #endif
 /** @} */
 
