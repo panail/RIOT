@@ -20,6 +20,9 @@
 
 #include "board_common.h"
 
+#ifdef MODULE_SILABS_TRACE
+#include "bsp_trace.h"
+#endif
 #ifdef MODULE_SILABS_AEM
 #include "aem.h"
 #endif
@@ -32,6 +35,12 @@
 
 void board_common_init(void)
 {
+
+    /* initialize the trace profiler for the advanced energy monitor */
+#ifdef MODULE_SILABS_TRACE
+    BSP_TraceProfilerSetup();
+#endif
+
     /* initialize the advanced energy monitor */
 #ifdef MODULE_SILABS_AEM
     aem_init();
