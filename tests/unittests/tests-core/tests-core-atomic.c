@@ -36,7 +36,6 @@ static void test_atomic_inc_positive(void)
     TEST_ASSERT_EQUAL_INT(1, atomic_fetch_add(&res, 1));
     TEST_ASSERT_EQUAL_INT(2, atomic_load(&res));
     atomic_store(&res, 0);
-
     for (int i = 0; i < 512; ++i) {
         TEST_ASSERT_EQUAL_INT(i, atomic_fetch_add(&res, 1));
         TEST_ASSERT_EQUAL_INT(i + 1, atomic_load(&res));
@@ -61,7 +60,6 @@ static void test_atomic_inc_rollover(void)
         TEST_ASSERT_EQUAL_INT(INT_MAX - 30 + i, atomic_fetch_add(&res, 1));
         TEST_ASSERT_EQUAL_INT(INT_MAX - 30 + i + 1, atomic_load(&res));
     }
-
     TEST_ASSERT_EQUAL_INT(INT_MAX, atomic_fetch_add(&res, 1));
     TEST_ASSERT_EQUAL_INT(INT_MIN, atomic_load(&res));
     TEST_ASSERT_EQUAL_INT(INT_MIN, atomic_fetch_add(&res, 1));
@@ -79,9 +77,7 @@ static void test_atomic_dec_negative(void)
     TEST_ASSERT_EQUAL_INT(-1, atomic_load(&res));
     TEST_ASSERT_EQUAL_INT(-1, atomic_fetch_sub(&res, 1));
     TEST_ASSERT_EQUAL_INT(-2, atomic_load(&res));
-
     atomic_store(&res, 0);
-
     for (int i = 0; i < 512; ++i) {
         TEST_ASSERT_EQUAL_INT(-i, atomic_fetch_sub(&res, 1));
         TEST_ASSERT_EQUAL_INT(-i - 1, atomic_load(&res));
@@ -106,7 +102,6 @@ static void test_atomic_dec_rollover(void)
         TEST_ASSERT_EQUAL_INT(INT_MIN + 30 - i, atomic_fetch_sub(&res, 1));
         TEST_ASSERT_EQUAL_INT(INT_MIN + 30 - i - 1, atomic_load(&res));
     }
-
     TEST_ASSERT_EQUAL_INT(INT_MIN, atomic_fetch_sub(&res, 1));
     TEST_ASSERT_EQUAL_INT(INT_MAX, atomic_load(&res));
     TEST_ASSERT_EQUAL_INT(INT_MAX, atomic_fetch_sub(&res, 1));
@@ -125,17 +120,14 @@ static void test_atomic_cas_same(void)
     TEST_ASSERT_EQUAL_INT(1, atomic_compare_exchange_weak(&res, &expected, 12345));
     TEST_ASSERT_EQUAL_INT(12345, atomic_load(&res));
     TEST_ASSERT_EQUAL_INT(0, expected);
-
     expected = 12345;
     TEST_ASSERT_EQUAL_INT(1, atomic_compare_exchange_weak(&res, &expected, -9876));
     TEST_ASSERT_EQUAL_INT(-9876, atomic_load(&res));
     TEST_ASSERT_EQUAL_INT(12345, expected);
-
     expected = -9876;
     TEST_ASSERT_EQUAL_INT(1, atomic_compare_exchange_weak(&res, &expected, -9876));
     TEST_ASSERT_EQUAL_INT(-9876, atomic_load(&res));
     TEST_ASSERT_EQUAL_INT(-9876, expected);
-
     expected = -9876;
     TEST_ASSERT_EQUAL_INT(1, atomic_compare_exchange_weak(&res, &expected, 0));
     TEST_ASSERT_EQUAL_INT(0, atomic_load(&res));
