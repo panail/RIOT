@@ -40,16 +40,6 @@ extern "C" {
 #define XTIMER_WIDTH        (16)
 /** @} */
 
-/**
- * @name    Enable Advanced Energy Monitor
- *
- * When enabled, additional CPU statistics are available via SWO.
- * @{
- */
-#ifndef AEM_ENABLED
-#define AEM_ENABLED         (1)
-#endif
-/** @} */
 
 /**
  * @brief   Push button pin definitions
@@ -139,15 +129,6 @@ extern "C" {
  * @{
  */
 #define BATT_MEASS_ONOFF_PIN    GPIO_PIN(PB, 12)
-/** @} */
-
-/**
- * @brief   Pin for communication with the Power & Interrupt Controller
- * @{
- */
-#define PIC_INT_WAKE_PIN    GPIO_PIN(PD, 10)
-#define PIC_I2C             (0)
-#define PIC_I2C_ADDR        (0x90)
 /** @} */
 
 // TODO Sensors

@@ -19,8 +19,7 @@
  */
 
 #include "board.h"
-#include "cpu.h"
-
+#include "board_common.h"
 #include "periph/gpio.h"
 #include "periph/i2c.h"
 #include "periph/adc.h"
@@ -34,15 +33,15 @@ void board_init(void)
     /* cpu init */
     cpu_init();
 
-    /* enable SWO output pin for Energy Profiler TODO ifdef stuff */
-    BSP_TraceProfilerSetup();
+    /* perform common board initialization */
+    board_common_init();
 
-    /* init led */
-    gpio_init(LED0_PIN, GPIO_OUT);
+    /* init led, done in common_init */
+    //gpio_init(LED0_PIN, GPIO_OUT);
 
     /* init the buttons */
-    gpio_init(BTN0_PIN, GPIO_IN);
-    gpio_init(BTN1_PIN, GPIO_IN);
+    //gpio_init(BTN0_PIN, GPIO_IN);
+    //gpio_init(BTN1_PIN, GPIO_IN);
     gpio_init(BTN2_PIN, GPIO_IN);
     gpio_init(BTN3_PIN, GPIO_IN);
     gpio_init(BTN4_PIN, GPIO_IN);
