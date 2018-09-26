@@ -13,6 +13,10 @@ from testrunner import run
 # Got 80 iotlab-m3 and 250 on samr21-xpro
 TIMEOUT = 300
 
+# Float and print operations are slow on boards
+# Got 80 iotlab-m3 and 250 on samr21-xpro
+TIMEOUT = 300
+
 
 def testfunc(child):
     child.expect('SUCCESS', timeout=TIMEOUT)

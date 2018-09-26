@@ -13,6 +13,10 @@ from testrunner import run
 TIMEOUT = 150
 
 
+# Biggest step takes 135 seconds on wn430
+TIMEOUT = 150
+
+
 def testfunc(child):
     child.expect_exact("Testing Bloom filter.")
     child.expect_exact("m: 4096 k: 8")

@@ -7,7 +7,7 @@
  * General Public License v2.1. See the file LICENSE in the top level
  * directory for more details.
  *
- * @ingroup sys_auto_init
+ * @ingroup auto_init
  * @{
  * @file
  * @brief   initializes any used module that has a trivial init function
@@ -19,6 +19,10 @@
 #include <stdio.h>
 
 #include "auto_init.h"
+
+#ifdef MODULE_SHT11
+#include "sht11.h"
+#endif
 
 #ifdef MODULE_MCI
 #include "diskio.h"
@@ -100,6 +104,10 @@ void auto_init(void)
 #ifdef MODULE_XTIMER
     DEBUG("Auto init xtimer module.\n");
     xtimer_init();
+#endif
+#ifdef MODULE_SHT11
+    DEBUG("Auto init SHT11 module.\n");
+    sht11_init();
 #endif
 #ifdef MODULE_MCI
     DEBUG("Auto init mci module.\n");
@@ -184,6 +192,11 @@ void auto_init(void)
 #ifdef MODULE_MRF24J40
     extern void auto_init_mrf24j40(void);
     auto_init_mrf24j40();
+#endif
+
+#ifdef MODULE_RAIL
+    extern void auto_init_rail(void);
+    auto_init_rail();
 #endif
 
 #ifdef MODULE_CC2420
@@ -427,6 +440,26 @@ auto_init_mpu9150();
 #ifdef MODULE_MMA7660
     extern void auto_init_mma7660(void);
     auto_init_mma7660();
+#endif
+#ifdef MODULE_EFM32_VDD_MEASUREMENT
+    extern void auto_init_efm32_vdd_measurement(void);
+    auto_init_efm32_vdd_measurement();
+#endif
+#ifdef MODULE_EFM32_INTERNAL_TEMP_SENSOR
+    extern void auto_init_efm32_internal_temp_sensor(void);
+    auto_init_efm32_internal_temp_sensor();
+#endif
+#ifdef MODULE_BATTERY_MONITOR
+    extern void auto_init_battery_monitor(void);
+    auto_init_battery_monitor();
+#endif
+#ifdef MODULE_MS5607
+    extern void auto_init_ms5607(void);
+    auto_init_ms5607();
+#endif
+#ifdef MODULE_SHT35
+    extern void auto_init_sht35(void);
+    auto_init_sht35();
 #endif
 
 #endif /* MODULE_AUTO_INIT_SAUL */

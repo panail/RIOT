@@ -1,5 +1,9 @@
 MODULE = boards_common_silabs
 
+ifneq (,$(filter silabs_trace,$(USEMODULE)))
+  DIRS += drivers/trace
+endif
+
 ifneq (,$(filter silabs_aem,$(USEMODULE)))
   DIRS += drivers/aem
 endif
