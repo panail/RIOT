@@ -122,7 +122,10 @@ static ssize_t _simple_recv_metadata(firmware_simple_update_t *state, const uint
             state->state = FIRMWARE_UPDATE_VERIFIED;
             LOG_INFO("ota: verification successful\n");
         }
-        state->writer.flashpage++;
+        if (FLASHPAGE_SIZE <= FIRMWARE_METADATA_SIZE) {
+            state->writer.flashpage++;
+        }
+
     }
     return to_copy;
 }

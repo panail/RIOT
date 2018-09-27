@@ -78,6 +78,7 @@ static void dcdc_init(void)
  * When selecting the HFXO, the HFRCO is disabled. The same applies for the
  * LFA, LFB and LFE branch, in case the LFXO is selected.
  */
+#ifndef BOOTLOADER
 static void clk_init(void)
 {
     /* initialize HFXO with board-specific parameters before switching */
@@ -131,6 +132,7 @@ static void clk_init(void)
         CMU_OscillatorEnable(cmuOsc_LFRCO, false, false);
     }
 }
+#endif
 
 /**
  * @brief   Initialize sleep modes
@@ -165,9 +167,10 @@ void cpu_init(void)
     /* initialize dc-dc */
     dcdc_init();
 #endif
-
+#ifndef BOOTLOADER
     /* initialize clock sources and generic clocks */
     clk_init();
+#endif
 
     /* initialize power management interface */
     pm_init();
