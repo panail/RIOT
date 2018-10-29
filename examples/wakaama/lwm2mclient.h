@@ -434,6 +434,32 @@ void display_security_object(lwm2m_object_t *object);
 void copy_security_object(lwm2m_object_t *object_dest, lwm2m_object_t *object_src);
 
 /*
+ * object_firmware.c
+ */
+
+/**
+ * @brief  Instantiate an lwm2m firmware object.
+ *
+ * @return Pointer to object on success.
+ * @param  NULL on error.
+ */
+lwm2m_object_t * get_object_firmware(void);
+
+/**
+ * @brief  Release resouces of an lwm2m firmware object.
+ *
+ * @param[in] object  Pointer to the object.
+ */
+void free_object_firmware(lwm2m_object_t * objectP);
+
+/**
+ * @brief  Prints a string representation of an lwm2m firmware object to stdout.
+ *
+ * @param[in] object  Pointer to the object.
+ */
+void display_firmware_object(lwm2m_object_t * objectP);
+
+/*
  * Run the wakaama process.
  *
  * @param[in] arg Ignored.

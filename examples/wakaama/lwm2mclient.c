@@ -122,7 +122,7 @@
 
 static int g_quit = 0;
 
-#define OBJ_COUNT 4
+#define OBJ_COUNT 5
 lwm2m_object_t *obj_array[OBJ_COUNT];
 
 /* only backup security and server objects */
@@ -420,6 +420,14 @@ void *lwm2m_run_server(void *arg)
             "Failed to create Access Control ACL resource for server_id: 999\r\n");
         return NULL;
     }
+
+    obj_array[4] = get_object_firmware();
+    if (NULL == obj_array[4])
+    {
+        fprintf(stderr, "Failed to create Firmware object\r\n");
+        return NULL;
+    }
+
     /*
      * The liblwm2m library is now initialized with the functions that will be in
      * charge of communication
