@@ -21,6 +21,12 @@ BOARD_INSUFFICIENT_MEMORY := airfy-beacon b-l072z-lrwan1 bluepill calliope-mini 
                              spark-core stm32f0discovery yunjia-nrf51822
 
 
+USEMODULE += firmware
+USEMODULE += firmware_simple
+USEMODULE += nanocoap_sock
+USEMODULE += gnrc_udp
+USEMODULE += sock_util
+
 # Include packages that pull up and auto-init the link layer.
 # NOTE: 6LoWPAN will be included if IEEE802.15.4 devices are present
 USEMODULE += gnrc_netdev_default
@@ -51,7 +57,8 @@ USEMODULE += memarray
 DEVELHELP ?= 1
 
 # Specific the server URI  address (NOTE: Domain names not supported yet)
-SERVER_URI ?= '"coap://[fd00:dead:beef::1]"'
+SERVER_URI ?= '"coaps://[fe80::1ac0:ffee:1ac0:ffee]"'
+
 
 ifneq (,$(SERVER_URI))
   CFLAGS += -DLWM2M_SERVER_URI=$(SERVER_URI)

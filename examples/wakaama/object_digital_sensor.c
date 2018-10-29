@@ -233,6 +233,7 @@ static uint8_t prv_bool_write(uint16_t instance_id, int num_data,
                     target->polarity = value.b;
                     result = COAP_204_CHANGED;
                 }
+                break;
             case LWM2M_DINPUT_DEBOUNCE_ATTR:
                 if (lwm2m_data_decode_int(&data_array[i], &value.i) != 1) {
                     result = COAP_400_BAD_REQUEST;
@@ -241,6 +242,7 @@ static uint8_t prv_bool_write(uint16_t instance_id, int num_data,
                     target->debounce = (uint32_t)value.i * US_PER_MS;
                     result = COAP_204_CHANGED;
                 }
+                break;
             case LWM2M_DINPUT_EDGESELECT_ATTR:
                 if (lwm2m_data_decode_int(&data_array[i], &value.i) != 1) {
                     result = COAP_400_BAD_REQUEST;
@@ -252,6 +254,7 @@ static uint8_t prv_bool_write(uint16_t instance_id, int num_data,
                     prv_set_interrupt(target);
                     result = COAP_204_CHANGED;
                 }
+                break;
             default:
                 result = COAP_404_NOT_FOUND;
                 break;

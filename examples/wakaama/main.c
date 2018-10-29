@@ -31,7 +31,7 @@
 
 #define READER_QUEUE_SIZE (8U)
 #define SHELL_QUEUE_SIZE (8U)
-char _server_stack[THREAD_STACKSIZE_MAIN + THREAD_EXTRA_STACKSIZE_PRINTF];
+char _server_stack[3*THREAD_STACKSIZE_MAIN + THREAD_EXTRA_STACKSIZE_PRINTF];
 
 static kernel_pid_t _wakaama_kernel_pid = KERNEL_PID_UNDEF;
 
